@@ -1,1 +1,138 @@
-<p>home works!</p>
+<div class="home-container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">Find Your Perfect Hotel</h1>
+        <p class="hero-subtitle">Book the best hotels for your next getaway with ease.</p>
+        
+      </div>
+    </div>
+  
+    <!-- Featured Hotels Section -->
+    <div class="featured-section">
+      <h2 class="section-title">Featured Hotels</h2>
+      <mat-spinner *ngIf="loading"></mat-spinner>
+      <div class="hotel-grid" *ngIf="!loading">
+        <mat-card *ngFor="let hotel of featuredHotels" class="hotel-card" @cardAnimation>
+          <mat-card-header>
+            <mat-card-title>{{ hotel.name }}</mat-card-title>
+            <mat-card-subtitle>{{ hotel.location }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Price per Night: {{ hotel.price_per_night | currency }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary" [routerLink]="['/hotels', hotel.id]">View Details</button>
+            <button mat-raised-button color="accent" [routerLink]="['/booking', hotel.id]">Book Now</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <section class="features-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2>Why Choose <span class="highlight">Us</span></h2>
+        <p class="section-subtitle">Features that make us stand out</p>
+      </div>
+  
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <img src="assets/images/home2.jpg" alt="Features" class="img-fluid rounded shadow">
+        </div>
+  
+        <div class="col-lg-6">
+          <div class="features-list">
+  
+            <div class="feature-item d-flex align-items-start mb-4">
+              <mat-icon color="primary" class="me-3">public</mat-icon>
+              <div>
+                <h4>Global Selection</h4>
+                <p>Access to over 500,000 hotels worldwide, from luxury resorts to boutique guesthouses in 190+ countries.</p>
+              </div>
+            </div>
+  
+            <div class="feature-item d-flex align-items-start mb-4">
+              <mat-icon color="primary" class="me-3">smartphone</mat-icon>
+              <div>
+                <h4>Mobile Friendly</h4>
+                <p>Book on the go with our responsive mobile app. Access your bookings, check in details, and get directions with ease.</p>
+              </div>
+            </div>
+  
+            <div class="feature-item d-flex align-items-start mb-4">
+              <mat-icon color="primary" class="me-3">security</mat-icon>
+              <div>
+                <h4>Secure Payments</h4>
+                <p>Industry-leading encryption and security protocols ensure your payment information is always protected.</p>
+              </div>
+            </div>
+  
+            <div class="feature-item d-flex align-items-start">
+              <mat-icon color="primary" class="me-3">credit_card</mat-icon>
+              <div>
+                <h4>No Hidden Fees</h4>
+                <p>Transparent pricing with all applicable taxes and fees clearly displayed before you complete your booking.</p>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer Section -->
+  <footer class="footer bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container">
+      <div class="row">
+  
+        <!-- About -->
+        <div class="col-md-4 mb-4">
+          <h5>About Us</h5>
+          <p>We make booking your perfect hotel effortless. Explore a wide range of accommodations, from luxury resorts to budget-friendly stays, tailored to your travel needs.</p>
+        </div>
+  
+        <!-- Quick Links -->
+        <div class="col-md-2 mb-4">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a routerLink="/home" class="text-white">Home</a></li>
+            <li><a routerLink="/hotels" class="text-white">Hotels</a></li>
+            <li><a routerLink="/contact" class="text-white">Contact Us</a></li>
+            <li><a routerLink="/about" class="text-white">About Us</a></li>
+          </ul>
+        </div>
+  
+        <!-- Contact Info -->
+        <div class="col-md-3 mb-4">
+          <h5>Contact Info</h5>
+          <ul class="list-unstyled">
+            <li><mat-icon class="me-2">location_on</mat-icon> 456 Travel Avenue, Hospitality City</li>
+            <li><mat-icon class="me-2">phone</mat-icon> +1 234 567 8901</li>
+            <li><mat-icon class="me-2">email</mat-icon> supporthotelstay.com</li>
+          </ul>
+        </div>
+  
+        <!-- Social Media -->
+        <div class="col-md-3 mb-4">
+          <h5>Follow Us</h5>
+          <div class="d-flex gap-3">
+            <a href="#"><mat-icon>facebook</mat-icon></a>
+            <a href="#"><mat-icon>twitter</mat-icon></a>
+            <a href="#"><mat-icon>instagram</mat-icon></a>
+            <a href="#"><mat-icon>linkedin</mat-icon></a>
+          </div>
+        </div>
+  
+      </div>
+  
+      <hr class="bg-light">
+  
+      <div class="text-center">
+        <p class="mb-0">© 2025 HotelStay. All rights reserved. <a href="#" class="text-white">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
+  
