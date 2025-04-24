@@ -1,18 +1,69 @@
-.container {
+.hotel-details-container {
     padding: 20px;
+    background: #f4f6f9;
   }
   
   .hotel-details-card {
+    margin-bottom: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hotel-image {
+    height: 300px;
+    object-fit: cover;
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .hotel-price {
+    font-weight: 500;
+    margin-top: 8px;
+    font-size: 1.1rem;
+    color: #3e3e3e;
+  }
+  
+  .reviews-section, .add-review-section {
+    margin-top: 40px;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3f51b5;
+    margin-bottom: 15px;
+  }
+  
+  .reviews-list {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .review-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+  }
+  
+  .review-item:last-child {
+    border-bottom: none;
+  }
+  
+  .add-review-section .form-field {
+    width: 100%;
     margin-bottom: 20px;
   }
   
-  .review-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-width: 500px;
+  .login-prompt {
+    margin-top: 15px;
+    color: #888;
   }
   
-  mat-list-item {
-    margin-bottom: 10px;
+  mat-form-field {
+    margin-bottom: 20px;
   }
+  
+  mat-raised-button {
+    margin-top: 10px;
+  }
+  

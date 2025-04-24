@@ -1,41 +1,52 @@
-<div class="container">
-    <mat-spinner *ngIf="loading"></mat-spinner>
+<div class="container hotel-details-container">
+    <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
+  
     <div *ngIf="hotel && !loading">
       <mat-card class="hotel-details-card">
+        <img mat-card-image [src]="hotel.image_url" alt="{{ hotel.name }}" class="hotel-image" />
+  
         <mat-card-header>
           <mat-card-title>{{ hotel.name }}</mat-card-title>
           <mat-card-subtitle>{{ hotel.location }}</mat-card-subtitle>
         </mat-card-header>
+  
         <mat-card-content>
-          <p>Price per Night: {{ hotel.price_per_night | currency }}</p>
+          <p class="hotel-price">Price per Night: {{ hotel.price_per_night | currency }}</p>
           <p>{{ hotel.description }}</p>
         </mat-card-content>
+  
         <mat-card-actions>
-          <button mat-raised-button color="accent" [routerLink]="['/booking', hotel.id]">
-            Book Now
-          </button>
+          <button mat-raised-button color="accent" [routerLink]="['/booking', hotel.id]">Book Now</button>
         </mat-card-actions>
       </mat-card>
   
-      <h3>Reviews</h3>
-      <mat-list>
-        <mat-list-item *ngFor="let review of reviews">
-          <p mat-line><strong>{{ review.user_email }}</strong> ({{ review.rating }}/5): {{ review.comment }}</p>
-        </mat-list-item>
-      </mat-list>
+      <section class="reviews-section">
+        <h3 class="section-title">Reviews</h3>
+        <mat-list class="reviews-list">
+          <mat-list-item *ngFor="let review of reviews" class="review-item">
+            <p mat-line><strong>{{ review.user_email }}</strong> ({{ review.rating }}/5): {{ review.comment }}</p>
+          </mat-list-item>
+        </mat-list>
+      </section>
   
-      <h3>Add a Review</h3>
-      <form *ngIf="user" (ngSubmit)="onSubmitReview()" class="review-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Rating (1-5)</mat-label>
-          <input matInput type="number" [(ngModel)]="newReview.rating" name="rating" min="1" max="5" required>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Comment</mat-label>
-          <textarea matInput [(ngModel)]="newReview.comment" name="comment" required></textarea>
-        </mat-form-field>
-        <button mat-raised-button color="primary" type="submit">Submit Review</button>
-      </form>
-      <p *ngIf="!user">Please <a [routerLink]="['/auth']">log in</a> to add a review.</p>
+      <section class="add-review-section">
+        <h3 class="section-title">Add a Review</h3>
+        <form *ngIf="user" (ngSubmit)="onSubmitReview()" class="review-form">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Rating (1-5)</mat-label>
+            <input matInput type="number" [(ngModel)]="newReview.rating" name="rating" min="1" max="5" required>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Comment</mat-label>
+            <textarea matInput [(ngModel)]="newReview.comment" name="comment" required></textarea>
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" type="submit">Submit Review</button>
+        </form>
+  
+        <p *ngIf="!user" class="login-prompt">Please <a [routerLink]="['/auth']">log in</a> to add a review.</p>
+      </section>
     </div>
   </div>
+  
