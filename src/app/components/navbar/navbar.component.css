@@ -1,40 +1,68 @@
 .custom-navbar {
-    background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+    background: linear-gradient(to right, #1f4037, #99f2c8);
     color: white;
     padding: 0 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
   }
   
   .logo {
-    font-size: 26px;
-    font-weight: bold;
-    letter-spacing: 1px;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
     cursor: pointer;
     transition: color 0.3s ease;
   }
   
   .logo:hover {
-    color: #ffcc00;
+    color: #ffdf2b;
   }
   
   .spacer {
     flex: 1 1 auto;
   }
   
-  button[mat-button] {
+  .menu button {
     color: white;
     font-weight: 500;
-    margin-left: 12px;
-  }
-  
-  button[mat-button]:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    margin-left: 10px;
   }
   
   button[mat-stroked-button] {
     border-color: white;
-    margin-left: 15px;
-    font-weight: 600;
+    color: white;
+  }
+  
+  .mobile-toggle {
+    display: none;
+    color: white;
+  }
+  
+  .menu {
+    display: flex;
+    align-items: center;
+  }
+  
+  @media (max-width: 768px) {
+    .menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background-color: #1f4037;
+      padding: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+  
+    .menu.open {
+      display: flex;
+    }
+  
+    .mobile-toggle {
+      display: inline-flex;
+    }
   }
   

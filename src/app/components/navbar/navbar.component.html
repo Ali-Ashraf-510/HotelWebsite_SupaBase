@@ -1,13 +1,19 @@
 <mat-toolbar class="custom-navbar" color="primary">
+    <button mat-icon-button class="mobile-toggle" (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  
     <span class="logo" routerLink="/">StaySphere</span>
   
     <span class="spacer"></span>
   
-    <button mat-button routerLink="/hotels">Hotels</button>
-    <button mat-button routerLink="/about">About</button>
-    <button mat-button routerLink="/contact">Contact</button>
+    <div class="menu" [class.open]="isMenuOpen">
+      <button mat-button routerLink="/hotels">Hotels</button>
+      <button mat-button routerLink="/about">About</button>
+      <button mat-button routerLink="/contact">Contact</button>
   
-    <button mat-stroked-button color="accent" *ngIf="!user" routerLink="/auth">Sign In</button>
-    <button mat-stroked-button color="warn" *ngIf="user" (click)="signOut()">Sign Out</button>
+      <button mat-stroked-button color="accent" *ngIf="!user" routerLink="/auth">Sign In</button>
+      <button mat-stroked-button color="warn" *ngIf="user" (click)="signOut()">Sign Out</button>
+    </div>
   </mat-toolbar>
   
