@@ -1,0 +1,18 @@
+<div class="container">
+    <mat-spinner *ngIf="loading"></mat-spinner>
+    <div *ngIf="hotel && !loading">
+      <h2>Book Hotel: {{ hotel.name }}</h2>
+      <form *ngIf="user" (ngSubmit)="onSubmit()" class="booking-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Check-In Date</mat-label>
+          <input matInput type="date" [(ngModel)]="booking.check_in" name="check_in" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Check-Out Date</mat-label>
+          <input matInput type="date" [(ngModel)]="booking.check_out" name="check_out" required>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Confirm Booking</button>
+      </form>
+      <p *ngIf="!user">Please <a [routerLink]="['/auth']">log in</a> to book a hotel.</p>
+    </div>
+  </div>

@@ -1,0 +1,18 @@
+.container {
+    padding: 20px;
+  }
+  
+  .hotel-details-card {
+    margin-bottom: 20px;
+  }
+  
+  .review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+  }
+  
+  mat-list-item {
+    margin-bottom: 10px;
+  }

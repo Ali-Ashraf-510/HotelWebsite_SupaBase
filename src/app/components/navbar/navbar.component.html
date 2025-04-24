@@ -1,0 +1,7 @@
+<mat-toolbar color="primary">
+    <span routerLink="/hotels">Hotel Booking</span>
+    <span class="spacer"></span>
+    <button mat-button routerLink="/hotels">Hotels</button>
+    <button mat-button *ngIf="user" (click)="signOut()">Sign Out</button>
+    <button mat-button *ngIf="!user" routerLink="/auth">Sign In</button>
+</mat-toolbar>
