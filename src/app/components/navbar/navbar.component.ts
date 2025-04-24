@@ -18,10 +18,11 @@ export class NavbarComponent implements OnInit {
   constructor(private supabaseService: SupabaseService, private router: Router) {}
 
   ngOnInit() {
-    this.supabaseService.currentUser.subscribe((user) => {
+    this.supabaseService.currentUser.subscribe(user => {
       this.user = user;
     });
   }
+  
 
   async signOut() {
     await this.supabaseService.signOut();

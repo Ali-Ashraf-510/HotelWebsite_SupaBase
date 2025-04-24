@@ -1,3 +1,40 @@
-.spacer {
+.custom-navbar {
+    background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+    color: white;
+    padding: 0 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  .logo {
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .logo:hover {
+    color: #ffcc00;
+  }
+  
+  .spacer {
     flex: 1 1 auto;
   }
+  
+  button[mat-button] {
+    color: white;
+    font-weight: 500;
+    margin-left: 12px;
+  }
+  
+  button[mat-button]:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  button[mat-stroked-button] {
+    border-color: white;
+    margin-left: 15px;
+    font-weight: 600;
+  }
+  

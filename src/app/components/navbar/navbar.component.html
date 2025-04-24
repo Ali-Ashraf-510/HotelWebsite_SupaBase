@@ -1,7 +1,13 @@
-<mat-toolbar color="primary">
-    <span routerLink="/hotels">Hotel Booking</span>
+<mat-toolbar class="custom-navbar" color="primary">
+    <span class="logo" routerLink="/">StaySphere</span>
+  
     <span class="spacer"></span>
+  
     <button mat-button routerLink="/hotels">Hotels</button>
-    <button mat-button *ngIf="user" (click)="signOut()">Sign Out</button>
-    <button mat-button *ngIf="!user" routerLink="/auth">Sign In</button>
-</mat-toolbar>
+    <button mat-button routerLink="/about">About</button>
+    <button mat-button routerLink="/contact">Contact</button>
+  
+    <button mat-stroked-button color="accent" *ngIf="!user" routerLink="/auth">Sign In</button>
+    <button mat-stroked-button color="warn" *ngIf="user" (click)="signOut()">Sign Out</button>
+  </mat-toolbar>
+  
