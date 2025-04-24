@@ -1,18 +1,50 @@
-.container {
+.hotels-container {
     padding: 20px;
+    background: #f4f6f9;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #3f51b5;
+  }
+  
+  .hotels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
   }
   
   .hotel-card {
-    margin-bottom: 20px;
-    transition: transform 0.2s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 16px;
+    overflow: hidden;
   }
   
   .hotel-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   }
   
-  mat-card-actions {
-    display: flex;
-    gap: 10px;
+  .hotel-image {
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
   }
+  
+  .hotel-name {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #3e3e3e;
+  }
+  
+  .hotel-location {
+    color: #777;
+  }
+  
+  .hotel-price {
+    font-weight: 500;
+    margin-top: 8px;
+  }
+  

@@ -1,17 +1,25 @@
-<div class="container">
-    <h2>Hotels</h2>
-    <mat-spinner *ngIf="loading"></mat-spinner>
-    <mat-card *ngFor="let hotel of hotels" class="hotel-card">
-      <mat-card-header>
-        <mat-card-title>{{ hotel.name }}</mat-card-title>
-        <mat-card-subtitle>{{ hotel.location }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Price per Night: {{ hotel.price_per_night | currency }}</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" [routerLink]="['/hotels', hotel.id]">View Details</button>
-        <button mat-raised-button color="accent" [routerLink]="['/booking', hotel.id]">Book Now</button>
-      </mat-card-actions>
-    </mat-card>
+<div class="container hotels-container">
+    <h2 class="section-title">Explore Hotels</h2>
+    <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
+  
+    <div class="hotels-grid">
+      <mat-card *ngFor="let hotel of hotels" class="hotel-card">
+        <img mat-card-image [src]="hotel.image_url" alt="{{ hotel.name }}" class="hotel-image" />
+  
+        <mat-card-header>
+          <mat-card-title class="hotel-name">{{ hotel.name }}</mat-card-title>
+          <mat-card-subtitle class="hotel-location">{{ hotel.location }}</mat-card-subtitle>
+        </mat-card-header>
+  
+        <mat-card-content>
+          <p class="hotel-price">Price per Night: {{ hotel.price_per_night | currency }}</p>
+        </mat-card-content>
+  
+        <mat-card-actions>
+          <button mat-raised-button color="primary" [routerLink]="['/hotels', hotel.id]">View Details</button>
+          <button mat-raised-button color="accent" [routerLink]="['/booking', hotel.id]">Book Now</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
+  
