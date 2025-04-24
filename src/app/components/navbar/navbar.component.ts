@@ -17,14 +17,14 @@ export class NavbarComponent implements OnInit {
 
   constructor(private supabaseService: SupabaseService, private router: Router) {}
 
-  async ngOnInit() {
-    const { data: userData } = await this.supabaseService.getCurrentUser();
-    this.user = userData.user;
+  ngOnInit() {
+    this.supabaseService.currentUser.subscribe((user) => {
+      this.user = user;
+    });
   }
 
   async signOut() {
     await this.supabaseService.signOut();
-    this.user = null;
     this.router.navigate(['/hotels']);
   }
 }
