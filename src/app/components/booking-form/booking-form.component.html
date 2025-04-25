@@ -5,95 +5,143 @@
   <div *ngIf="hotel && !loading" class="form-section">
     <h3 class="section-title">Book Your Stay at {{ hotel.name }}</h3>
     <form #bookingForm="ngForm" (ngSubmit)="onSubmit()" class="form">
-
       <!-- Check-in -->
       <mat-form-field appearance="outline">
         <mat-label>Check-in</mat-label>
-        <input matInput [matDatepicker]="checkInPicker" [(ngModel)]="booking.check_in" name="check_in" [min]="minDate" [max]="maxDate" required>
+        <input
+          matInput
+          [matDatepicker]="checkInPicker"
+          [(ngModel)]="booking.check_in"
+          name="check_in"
+          [min]="minDate"
+          [max]="maxDate"
+          required
+        />
         <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
         <mat-datepicker #checkInPicker></mat-datepicker>
+        <mat-error *ngIf="bookingForm.controls['check_in']?.errors?.['required']">Check-in date is required</mat-error>
       </mat-form-field>
 
       <!-- Check-out -->
       <mat-form-field appearance="outline">
         <mat-label>Check-out</mat-label>
-        <input matInput [matDatepicker]="checkOutPicker" [(ngModel)]="booking.check_out" name="check_out" [min]="booking.check_in" [max]="maxDate" required>
+        <input
+          matInput
+          [matDatepicker]="checkOutPicker"
+          [(ngModel)]="booking.check_out"
+          name="check_out"
+          [min]="booking.check_in"
+          [max]="maxDate"
+          required
+        />
         <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
         <mat-datepicker #checkOutPicker></mat-datepicker>
+        <mat-error *ngIf="bookingForm.controls['check_out']?.errors?.['required']">Check-out date is required</mat-error>
       </mat-form-field>
 
       <!-- Guests -->
       <mat-form-field appearance="outline">
         <mat-label>Guests</mat-label>
-        <input matInput type="number" [(ngModel)]="booking.guests" name="guests" min="1" max="10" required>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="booking.guests"
+          name="guests"
+          min="1"
+          max="2"
+          required
+        />
+        <mat-hint>Additional guest: +$100 per night</mat-hint>
+        <mat-error *ngIf="bookingForm.controls['guests']?.errors?.['required']">Number of guests is required</mat-error>
       </mat-form-field>
 
       <!-- Total -->
       <mat-form-field appearance="outline">
         <mat-label>Total</mat-label>
-        <input matInput [value]="calculateTotalPrice() | currency" readonly>
+        <input matInput [value]="calculateTotalPrice() | currency" readonly />
       </mat-form-field>
 
       <!-- Submit -->
-      <button mat-raised-button color="accent" type="submit" [disabled]="bookingForm.invalid">Proceed to Payment</button>
+      <button
+        mat-raised-button
+        color="accent"
+        type="submit"
+        [disabled]="bookingForm.invalid || loading"
+      >
+        Proceed to Payment
+      </button>
     </form>
   </div>
 
   <!-- Payment Form -->
-  <div *ngIf="showPaymentSection && !loading" class="form-section">
+  <div *ngIf="showPaymentSection && !loading" class="form-section payment-section">
     <h3 class="section-title">Payment Details</h3>
     <form #paymentForm="ngForm" (ngSubmit)="onSubmitPayment()" class="form">
-
-      <!-- Payment Method -->
+      <!-- Card Number -->
       <mat-form-field appearance="outline">
-        <mat-label>Payment Method</mat-label>
-        <mat-select [(ngModel)]="payment.method" name="paymentMethod" required>
-          <mat-option value="credit_card">Credit/Debit Card</mat-option>
-          <mat-option value="paypal">PayPal</mat-option>
-          <mat-option value="bank_transfer">Bank Transfer</mat-option>
-        </mat-select>
+        <mat-label>Card Number</mat-label>
+        <input
+          matInput
+          [(ngModel)]="payment.cardNumber"
+          name="cardNumber"
+          placeholder="1234 5678 9012 3456"
+          (input)="formatCardNumber()"
+          maxlength="19"
+          required
+        />
+        <mat-error *ngIf="paymentForm.controls['cardNumber']?.errors?.['required']">Card number is required</mat-error>
       </mat-form-field>
 
-      <!-- Credit Card Fields -->
-      <ng-container *ngIf="payment.method === 'credit_card'">
-        <mat-form-field appearance="outline">
-          <mat-label>Card Number</mat-label>
-          <input matInput [(ngModel)]="payment.cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" required>
+      <!-- Expiry and CVV -->
+      <div class="row">
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>Expiry (MM/YY)</mat-label>
+          <input
+            matInput
+            [(ngModel)]="payment.expiryDate"
+            name="expiryDate"
+            placeholder="MM/YY"
+            (input)="formatExpiryDate()"
+            maxlength="5"
+            required
+          />
+          <mat-error *ngIf="paymentForm.controls['expiryDate']?.errors?.['required']">Expiry date is required</mat-error>
         </mat-form-field>
 
-        <div class="row">
-          <mat-form-field appearance="outline" class="half">
-            <mat-label>Expiry (MM/YY)</mat-label>
-            <input matInput [(ngModel)]="payment.expiryDate" name="expiryDate" placeholder="MM/YY" required>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half">
-            <mat-label>CVV</mat-label>
-            <input matInput [(ngModel)]="payment.cvv" name="cvv" required>
-          </mat-form-field>
-        </div>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Cardholder Name</mat-label>
-          <input matInput [(ngModel)]="payment.cardholderName" name="cardholderName" required>
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>CVV</mat-label>
+          <input
+            matInput
+            [(ngModel)]="payment.cvv"
+            name="cvv"
+            maxlength="4"
+            required
+          />
+          <mat-error *ngIf="paymentForm.controls['cvv']?.errors?.['required']">CVV is required</mat-error>
         </mat-form-field>
-      </ng-container>
-
-      <!-- PayPal Email -->
-      <mat-form-field *ngIf="payment.method === 'paypal'" appearance="outline">
-        <mat-label>PayPal Email</mat-label>
-        <input matInput type="email" [(ngModel)]="payment.paypalEmail" name="paypalEmail" required>
-      </mat-form-field>
-
-      <!-- Bank Transfer Info -->
-      <div *ngIf="payment.method === 'bank_transfer'">
-        <p>Please transfer the amount to:</p>
-        <p><strong>Bank:</strong> Example Bank</p>
-        <p><strong>Account:</strong> 1234567890</p>
-        <p><strong>Routing:</strong> 0987654321</p>
       </div>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="paymentForm.invalid">Confirm Payment</button>
+      <!-- Cardholder Name -->
+      <mat-form-field appearance="outline">
+        <mat-label>Cardholder Name</mat-label>
+        <input
+          matInput
+          [(ngModel)]="payment.cardholderName"
+          name="cardholderName"
+          required
+        />
+        <mat-error *ngIf="paymentForm.controls['cardholderName']?.errors?.['required']">Cardholder name is required</mat-error>
+      </mat-form-field>
+
+      <!-- Submit -->
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="paymentForm.invalid || loading"
+      >
+        Confirm Payment
+      </button>
     </form>
   </div>
 </div>

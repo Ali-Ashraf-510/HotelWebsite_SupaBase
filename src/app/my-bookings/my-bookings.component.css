@@ -1,0 +1,247 @@
+/* Import Google Fonts for modern typography */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Root variables for consistency */
+:root {
+  --primary-color: #007bff;
+  --accent-color: #0056b3;
+  --success-color: #28a745;
+  --warn-color: #dc3545;
+  --text-color: #333;
+  --light-gray: #f8f9fa;
+  --gradient-start: #e0e7ff;
+  --gradient-end: #bbdefb;
+  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --card-hover-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* My Bookings container */
+.my-bookings-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+  padding: 40px 20px;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  margin: 40px auto;
+}
+
+/* Bookings section */
+.bookings-section {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 32px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* No bookings message */
+.no-bookings {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: #666;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.no-bookings a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.no-bookings a:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+/* Bookings grid */
+.bookings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* Booking card */
+.booking-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.booking-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+mat-card-header {
+  padding: 16px;
+  background: var(--light-gray);
+}
+
+mat-card-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+mat-card-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #666;
+}
+
+mat-card-content {
+  padding: 16px;
+  font-family: 'Poppins', sans-serif;
+}
+
+mat-card-content p {
+  font-size: 14px;
+  color: var(--text-color);
+  margin-bottom: 8px;
+}
+
+mat-card-content p strong {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+mat-card-content p.status-confirmed {
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+mat-card-content p.status-pending {
+  color: #ffc107;
+  font-weight: 500;
+}
+
+mat-card-content p.status-cancelled {
+  color: var(--warn-color);
+  font-weight: 500;
+}
+
+mat-card-actions {
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+button[mat-raised-button] {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button[color="accent"] {
+  background: var(--success-color);
+}
+
+button[color="accent"]:hover:not(:disabled) {
+  background: #218838;
+  transform: scale(1.05);
+}
+
+button[color="warn"] {
+  background: var(--warn-color);
+}
+
+button[color="warn"]:hover:not(:disabled) {
+  background: #c82333;
+  transform: scale(1.05);
+}
+
+button:disabled {
+  background: #b0bec5;
+  cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+  .section-title {
+    font-size: 28px;
+  }
+
+  .bookings-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .my-bookings-container {
+    padding: 20px 16px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .no-bookings {
+    font-size: 16px;
+  }
+
+  .bookings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-card {
+    max-width: 350px;
+    margin: 0 auto;
+  }
+
+  mat-card-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  button[mat-raised-button] {
+    width: 100%;
+  }
+}

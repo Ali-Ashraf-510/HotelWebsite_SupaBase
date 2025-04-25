@@ -1,37 +1,42 @@
 <div class="container my-bookings-container">
-    <!-- Loading Spinner -->
-    <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
-  
-    <!-- Bookings Section -->
-    <div *ngIf="!loading && user" class="bookings-section">
-      <h3 class="section-title">My Bookings</h3>
-  
-      <!-- No Bookings Message -->
-      <p *ngIf="bookings.length === 0" class="no-bookings">
-        You have no bookings yet. <a (click)="bookAnother()">Book now!</a>
-      </p>
-  
-      <!-- Bookings List -->
-      <div class="bookings-grid">
-        <mat-card *ngFor="let booking of bookings" class="booking-card">
-          <mat-card-header>
-            <mat-card-title>{{ booking.hotels.name }}</mat-card-title>
-            <mat-card-subtitle>{{ booking.hotels.location }}</mat-card-subtitle>
-          </mat-card-header>
-  
-          <mat-card-content>
-            <p><strong>Check-in:</strong> {{ booking.check_in | date:'mediumDate' }}</p>
-            <p><strong>Check-out:</strong> {{ booking.check_out | date:'mediumDate' }}</p>
-            <p><strong>Total Price:</strong> {{ booking.total_price | currency }}</p>
-            <p><strong>Status:</strong> {{ booking.status }}</p>
-          </mat-card-content>
-  
-          <mat-card-actions>
-            <button mat-raised-button color="accent" (click)="bookAnother()">Book Another Stay</button>
-            <button mat-raised-button color="warn" (click)="cancelBooking(booking.id)">Cancel Booking</button>
-          </mat-card-actions>
-          
-        </mat-card>
-      </div>
+  <!-- Loading Spinner -->
+  <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
+
+  <!-- Bookings Section -->
+  <div *ngIf="!loading && user" class="bookings-section">
+    <h3 class="section-title">My Bookings</h3>
+
+    <!-- No Bookings Message -->
+    <p *ngIf="bookings.length === 0" class="no-bookings">
+      You have no bookings yet. <a routerLink="/hotels">Book now!</a>
+    </p>
+
+    <!-- Bookings List -->
+    <div class="bookings-grid">
+      <mat-card *ngFor="let booking of bookings" class="booking-card">
+        <mat-card-header>
+          <mat-card-title>{{ booking.hotels.name }}</mat-card-title>
+          <mat-card-subtitle>{{ booking.hotels.location }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p><strong>Check-in:</strong> {{ booking.check_in | date:'mediumDate' }}</p>
+          <p><strong>Check-out:</strong> {{ booking.check_out | date:'mediumDate' }}</p>
+          <p><strong>Total Price:</strong> {{ booking.total_price | currency }}</p>
+          <p [ngClass]="{
+            'status-confirmed': booking.status === 'confirmed',
+            'status-pending': booking.status === 'pending',
+            'status-cancelled': booking.status === 'cancelled'
+          }">
+            <strong>Status:</strong> {{ booking.status }}
+          </p>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button color="accent" (click)="bookAnother()">Book Another Stay</button>
+          <button mat-raised-button color="warn" (click)="cancelBooking(booking.id)">Cancel Booking</button>
+        </mat-card-actions>
+      </mat-card>
     </div>
   </div>
+</div>
