@@ -1,39 +1,46 @@
-<div class="sign-up-container">
+<div class="sign-up-wrapper">
+  <div class="sign-up-container">
     <mat-card class="sign-up-card" @fadeIn>
       <mat-card-header>
         <mat-card-title class="card-title">Create Your Account</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <form (ngSubmit)="onSubmit()" class="sign-up-form">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" [(ngModel)]="formData.name" name="name" required [disabled]="loading">
+            <mat-error *ngIf="formErrors['name']">{{ formErrors['name'] }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Email</mat-label>
             <input matInput type="email" [(ngModel)]="formData.email" name="email" required [disabled]="loading">
             <mat-error *ngIf="formErrors['email']">{{ formErrors['email'] }}</mat-error>
           </mat-form-field>
-  
-          <mat-form-field appearance="outline">
+
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Password</mat-label>
             <input matInput type="password" [(ngModel)]="formData.password" name="password" required [disabled]="loading">
             <mat-error *ngIf="formErrors['password']">{{ formErrors['password'] }}</mat-error>
           </mat-form-field>
-  
-          <mat-form-field appearance="outline">
+
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Confirm Password</mat-label>
             <input matInput type="password" [(ngModel)]="formData.confirmPassword" name="confirmPassword" required [disabled]="loading">
             <mat-error *ngIf="formErrors['confirmPassword']">{{ formErrors['confirmPassword'] }}</mat-error>
           </mat-form-field>
-  
-          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+
+          <button mat-raised-button color="primary" type="submit" class="submit-button" [disabled]="loading">
             <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
             <span *ngIf="!loading">Sign Up</span>
           </button>
-  
-          <p>Already have an account? <a routerLink="/auth">Sign In</a></p>
+
+          <p class="sign-in-link">Already have an account? <a routerLink="/auth" class="link">Sign In</a></p>
         </form>
-  
+
         <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
         <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
       </mat-card-content>
     </mat-card>
   </div>
-  
+</div>

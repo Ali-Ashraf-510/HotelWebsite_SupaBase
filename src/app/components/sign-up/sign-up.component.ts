@@ -36,6 +36,7 @@ import { CommonModule } from '@angular/common';
 })
 export class SignUpComponent {
   formData = {
+    name: '', // Added name field
     email: '',
     password: '',
     confirmPassword: ''
@@ -51,18 +52,28 @@ export class SignUpComponent {
   validateForm(): boolean {
     this.formErrors = {};
 
+    // Validate name
+    if (!this.formData.name) {
+      this.formErrors['name'] = 'Name is required';
+    } else if (this.formData.name.length < 2) {
+      this.formErrors['name'] = 'Name must be at least 2 characters';
+    }
+
+    // Validate email
     if (!this.formData.email) {
       this.formErrors['email'] = 'Email is required';
     } else if (!this.formData.email.includes('@')) {
       this.formErrors['email'] = 'Please enter a valid email';
     }
 
+    // Validate password
     if (!this.formData.password) {
       this.formErrors['password'] = 'Password is required';
     } else if (this.formData.password.length < 6) {
       this.formErrors['password'] = 'Password must be at least 6 characters';
     }
 
+    // Validate confirm password
     if (!this.formData.confirmPassword) {
       this.formErrors['confirmPassword'] = 'Please confirm your password';
     } else if (this.formData.password !== this.formData.confirmPassword) {
@@ -80,7 +91,12 @@ export class SignUpComponent {
     this.successMessage = null;
 
     try {
-      const { error } = await this.supabaseService.signUp(this.formData.email, this.formData.password) as { error?: { message: string } };
+      // Pass name along with email and password to SupabaseService
+      const { error } = await this.supabaseService.signUp(
+        this.formData.email,
+        this.formData.password,
+        this.formData.name // Pass name as an additional parameter
+      ) as { error?: { message: string } };
 
       if (error) {
         this.errorMessage = error.message || 'An unexpected error occurred';
