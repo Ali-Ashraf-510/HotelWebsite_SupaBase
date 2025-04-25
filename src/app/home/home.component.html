@@ -1,138 +1,148 @@
 <div class="home-container">
-    <!-- Hero Section -->
-    <div class="hero-section">
-      <div class="hero-content">
-        <h1 class="hero-title">Find Your Perfect Hotel</h1>
-        <p class="hero-subtitle">Book the best hotels for your next getaway with ease.</p>
-        
-      </div>
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Find Your Perfect Hotel</h1>
+      <p class="hero-subtitle">Book the best hotels for your next getaway with ease.</p>
+      <!-- Search Bar -->
+      <form (ngSubmit)="searchHotels()" class="search-form" @fadeIn>
+        <div class="search-field">
+          <input [(ngModel)]="searchQuery" name="searchQuery" placeholder="Enter location or hotel name">
+          <span class="search-icon"><i class="fas fa-search"></i></span>
+        </div>
+        <button type="submit" class="search-button">Search</button>
+      </form>
     </div>
-  
-    <!-- Featured Hotels Section -->
-    <div class="featured-section">
-      <h2 class="section-title">Featured Hotels</h2>
-      <mat-spinner *ngIf="loading"></mat-spinner>
-      <div class="hotel-grid" *ngIf="!loading">
-        <mat-card *ngFor="let hotel of featuredHotels" class="hotel-card" @cardAnimation>
-          <mat-card-header>
-            <mat-card-title>{{ hotel.name }}</mat-card-title>
-            <mat-card-subtitle>{{ hotel.location }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p>Price per Night: {{ hotel.price_per_night | currency }}</p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-raised-button color="primary" [routerLink]="['/hotels', hotel.id]">View Details</button>
-            <button mat-raised-button color="accent" [routerLink]="['/booking', hotel.id]">Book Now</button>
-          </mat-card-actions>
-        </mat-card>
+  </div>
+
+  <!-- Featured Hotels Section -->
+  <div class="featured-section">
+    <h2 class="section-title">Featured Hotels</h2>
+    <div class="hotel-grid">
+      <div *ngFor="let hotel of featuredHotels" class="hotel-card" >
+        <div class="hotel-image" *ngIf="hotel.image_url">
+          <img [src]="hotel.image_url" [alt]="hotel.name">
+        </div>
+        <div class="hotel-content">
+          <h3 class="hotel-title">{{ hotel.name }}</h3>
+          <p class="hotel-location">{{ hotel.location }}</p>
+          <p class="hotel-price">Price per Night: {{ hotel.price_per_night | currency }}</p>
+          <div class="hotel-rating">
+            <span class="rating-value">{{ hotel.rating }}/5</span>
+            <span class="rating-stars">
+              <i *ngFor="let star of getStars(hotel.rating)" class="fas fa-star {{ star.class }}"></i>
+            </span>
+          </div>
+          <div class="hotel-actions">
+            <button class="btn btn-accent" [routerLink]="['/booking', hotel.id]" [class.disabled]="loading" [disabled]="loading">
+              Book Now
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- Features Section -->
   <section class="features-section">
     <div class="container">
       <div class="text-center mb-5">
         <h2>Why Choose <span class="highlight">Us</span></h2>
         <p class="section-subtitle">Features that make us stand out</p>
       </div>
-  
+
       <div class="row align-items-center">
         <div class="col-lg-6">
-          <img src="assets/images/home2.jpg" alt="Features" class="img-fluid rounded shadow">
+          <img src="https://images.unsplash.com/photo-1707172308283-e2d1e44d0be3?q=80&w=1300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Features" class="img-fluid rounded shadow">
         </div>
-  
+
         <div class="col-lg-6">
           <div class="features-list">
-  
             <div class="feature-item d-flex align-items-start mb-4">
-              <mat-icon color="primary" class="me-3">public</mat-icon>
+              <i class="fas fa-globe feature-icon me-3"></i>
               <div>
                 <h4>Global Selection</h4>
                 <p>Access to over 500,000 hotels worldwide, from luxury resorts to boutique guesthouses in 190+ countries.</p>
               </div>
             </div>
-  
+
             <div class="feature-item d-flex align-items-start mb-4">
-              <mat-icon color="primary" class="me-3">smartphone</mat-icon>
+              <i class="fas fa-mobile-alt feature-icon me-3"></i>
               <div>
                 <h4>Mobile Friendly</h4>
                 <p>Book on the go with our responsive mobile app. Access your bookings, check in details, and get directions with ease.</p>
               </div>
             </div>
-  
+
             <div class="feature-item d-flex align-items-start mb-4">
-              <mat-icon color="primary" class="me-3">security</mat-icon>
+              <i class="fas fa-shield-alt feature-icon me-3"></i>
               <div>
                 <h4>Secure Payments</h4>
                 <p>Industry-leading encryption and security protocols ensure your payment information is always protected.</p>
               </div>
             </div>
-  
+
             <div class="feature-item d-flex align-items-start">
-              <mat-icon color="primary" class="me-3">credit_card</mat-icon>
+              <i class="fas fa-credit-card feature-icon me-3"></i>
               <div>
                 <h4>No Hidden Fees</h4>
                 <p>Transparent pricing with all applicable taxes and fees clearly displayed before you complete your booking.</p>
               </div>
             </div>
-  
           </div>
         </div>
       </div>
     </div>
   </section>
-  
+
   <!-- Footer Section -->
   <footer class="footer bg-dark text-white pt-5 pb-4 mt-5">
     <div class="container">
       <div class="row">
-  
         <!-- About -->
         <div class="col-md-4 mb-4">
           <h5>About Us</h5>
           <p>We make booking your perfect hotel effortless. Explore a wide range of accommodations, from luxury resorts to budget-friendly stays, tailored to your travel needs.</p>
         </div>
-  
+
         <!-- Quick Links -->
         <div class="col-md-2 mb-4">
           <h5>Quick Links</h5>
           <ul class="list-unstyled">
-            <li><a routerLink="/home" class="text-white">Home</a></li>
+            <li><a routerLink="/" class="text-white">Home</a></li>
             <li><a routerLink="/hotels" class="text-white">Hotels</a></li>
             <li><a routerLink="/contact" class="text-white">Contact Us</a></li>
             <li><a routerLink="/about" class="text-white">About Us</a></li>
           </ul>
         </div>
-  
+
         <!-- Contact Info -->
         <div class="col-md-3 mb-4">
           <h5>Contact Info</h5>
           <ul class="list-unstyled">
-            <li><mat-icon class="me-2">location_on</mat-icon> 456 Travel Avenue, Hospitality City</li>
-            <li><mat-icon class="me-2">phone</mat-icon> +1 234 567 8901</li>
-            <li><mat-icon class="me-2">email</mat-icon> supporthotelstay.com</li>
+            <li><i class="fas fa-map-marker-alt me-2"></i> 456 Travel Avenue, Hospitality City</li>
+            <li><i class="fas fa-phone me-2"></i> +1 234 567 8901</li>
+            <li><i class="fas fa-envelope me-2"></i> supporthotelstay.com</li>
           </ul>
         </div>
-  
+
         <!-- Social Media -->
         <div class="col-md-3 mb-4">
           <h5>Follow Us</h5>
           <div class="d-flex gap-3">
-            <a href="#"><mat-icon>facebook</mat-icon></a>
-            <a href="#"><mat-icon>twitter</mat-icon></a>
-            <a href="#"><mat-icon>instagram</mat-icon></a>
-            <a href="#"><mat-icon>linkedin</mat-icon></a>
+            <a href="#" class="text-white"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
-  
       </div>
-  
+
       <hr class="bg-light">
-  
+
       <div class="text-center">
         <p class="mb-0">© 2025 HotelStay. All rights reserved. <a href="#" class="text-white">Privacy Policy</a></p>
       </div>
     </div>
   </footer>
-  
+</div>

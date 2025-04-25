@@ -3,12 +3,6 @@ import { SupabaseService } from '../services/supabase.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
@@ -18,12 +12,6 @@ import { trigger, transition, style, animate } from '@angular/animations';
     CommonModule,
     RouterLink,
     FormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -56,15 +44,60 @@ export class HomeComponent implements OnInit {
   async loadFeaturedHotels() {
     this.loading = true;
     try {
-      const { data, error } = await this.supabaseService.client
+      // الخطوة 1: جيب كل الفنادق
+      const { data: hotels, error: hotelsError } = await this.supabaseService.client
         .from('hotels')
-        .select('*')
-        .limit(3);
-      if (error) {
-        console.error('Error loading featured hotels:', error);
-      } else {
-        this.featuredHotels = data || [];
+        .select('*');
+
+      if (hotelsError) {
+        console.error('Error loading hotels:', hotelsError);
+        return;
       }
+
+      if (!hotels || hotels.length === 0) {
+        console.warn('No hotels found');
+        return;
+      }
+
+      // الخطوة 2: جيب كل الـ reviews
+      const { data: reviews, error: reviewsError } = await this.supabaseService.client
+        .from('reviews')
+        .select('hotel_id, rating');
+
+      if (reviewsError) {
+        console.error('Error loading reviews:', reviewsError);
+        return;
+      }
+
+      // الخطوة 3: احسب متوسط الـ rating لكل فندق
+      const hotelRatings: { [key: number]: { total: number, count: number } } = {};
+
+      reviews.forEach((review: any) => {
+        const hotelId = review.hotel_id;
+        if (!hotelRatings[hotelId]) {
+          hotelRatings[hotelId] = { total: 0, count: 0 };
+        }
+        hotelRatings[hotelId].total += review.rating;
+        hotelRatings[hotelId].count += 1;
+      });
+
+      // الخطوة 4: أضف الـ average rating لكل فندق
+      const hotelsWithRatings = hotels.map((hotel: any) => {
+        const ratingData = hotelRatings[hotel.id] || { total: 0, count: 0 };
+        const averageRating = ratingData.count > 0 ? ratingData.total / ratingData.count : 0;
+        return {
+          ...hotel,
+          rating: parseFloat(averageRating.toFixed(1)), // تقريب لأقرب رقم عشري واحد
+        };
+      });
+
+      // الخطوة 5: رتب الفنادق بناءً على الـ rating وجيب أعلى 3
+      const sortedHotels = hotelsWithRatings
+        .sort((a: any, b: any) => b.rating - a.rating) // ترتيب تنازلي
+        .slice(0, 3); // أعلى 3 فنادق
+
+      // الخطوة 6: استبدل الـ mock data بالبيانات الحقيقية
+      this.featuredHotels = sortedHotels.length > 0 ? sortedHotels : this.featuredHotels;
     } catch (error) {
       console.error('Unexpected error:', error);
     } finally {
@@ -78,6 +111,23 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  
-}
+  // دالة لعرض النجوم بناءً على الـ rating
+  getStars(rating: number): { class: string }[] {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const totalStars = 5;
 
+    for (let i = 0; i < fullStars; i++) {
+      stars.push({ class: 'full' });
+    }
+    if (hasHalfStar && stars.length < totalStars) {
+      stars.push({ class: 'half' });
+    }
+    while (stars.length < totalStars) {
+      stars.push({ class: 'empty' });
+    }
+
+    return stars;
+  }
+}

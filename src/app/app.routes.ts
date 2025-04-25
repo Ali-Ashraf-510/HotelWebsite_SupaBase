@@ -13,8 +13,8 @@ export const routes: Routes = [
   { path: 'hotels', component: HotelListComponent },
   {path: 'contact', component: ContactComponent},
   {path: 'about', component: AboutComponent},
-  { path: 'sign-up', component: SignUpComponent },
   { path: 'hotels/:id', component: HotelDetailsComponent },
   { path: 'booking/:id', component: BookingFormComponent },
   { path: 'auth', component: AuthComponent },
+  { path: 'signup', component: SignUpComponent },
 ];
