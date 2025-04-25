@@ -11,7 +11,6 @@ import { MatCardModule } from '@angular/material/card';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     MatButtonModule,
     MatProgressSpinnerModule,
     MatCardModule,
