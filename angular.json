@@ -26,34 +26,32 @@
                 "input": "public"
               }
             ],
-"styles": [
-  "@angular/material/prebuilt-themes/azure-blue.css",
-  "node_modules/bootstrap/dist/css/bootstrap.min.css",
-  "src/styles.css"
-],
+            "styles": [
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css"
+            ],
             "scripts": []
           },
           "configurations": {
             "production": {
-       "budgets": [
-  {
-    "type": "initial",
-    "maximumWarning": "1mb",
-    "maximumError": "2mb"
-  },
-  {
-    "type": "anyComponentStyle",
-    "maximumWarning": "200kb",
-    "maximumError": "400kb"
-  },
-  {
-    "type": "any",
-    "maximumWarning": "20kb",
-    "maximumError": "30kb"
-  }
-]
-
-,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "200kb",
+                  "maximumError": "400kb"
+                },
+                {
+                  "type": "any",
+                  "maximumWarning": "20kb",
+                  "maximumError": "30kb"
+                }
+              ],
               "outputHashing": "all"
             },
             "development": {
