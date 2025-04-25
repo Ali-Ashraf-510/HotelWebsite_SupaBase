@@ -7,6 +7,8 @@ import { HomeComponent } from './home/home.component';
 import { ContactComponent } from './contact/contact.component';
 import { AboutComponent } from './about/about.component';   
 import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { MyBookingsComponent } from './my-bookings/my-bookings.component'; // Ensure this path is correct or update it to the correct file location
+
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {path: 'home', component: HomeComponent},
@@ -15,6 +17,7 @@ export const routes: Routes = [
   {path: 'about', component: AboutComponent},
   { path: 'hotels/:id', component: HotelDetailsComponent },
   { path: 'booking/:id', component: BookingFormComponent },
+  { path: 'my-bookings', component: MyBookingsComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'signup', component: SignUpComponent },
 ];

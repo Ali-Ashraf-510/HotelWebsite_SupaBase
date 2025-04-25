@@ -1,69 +1,389 @@
-.hotel-details-container {
-    padding: 20px;
-    background: #f4f6f9;
+/* Import Google Fonts for consistency */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Container */
+.container.hotel-details-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(180deg, #f7f9fc 0%, #e8ecef 100%);
+  min-height: calc(100vh - 80px); /* Adjust for navbar height */
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: block;
+  margin: 50px auto;
+  --mdc-circular-progress-active-indicator-color: #ff4081;
+}
+
+/* Hotel Details Card */
+.hotel-details-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 40px;
+}
+
+.hotel-details-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.hotel-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  transition: transform 0.5s ease;
+}
+
+.hotel-details-card:hover .hotel-image {
+  transform: scale(1.05);
+}
+
+mat-card-header {
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+mat-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+}
+
+mat-card-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+mat-card-subtitle::before {
+  content: '\f3c5';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #ff4081;
+}
+
+mat-card-content {
+  padding: 0 30px 30px;
+}
+
+.hotel-price {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+mat-card-content p {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.8;
+}
+
+mat-card-actions {
+  padding: 0 30px 30px;
+  display: flex;
+  justify-content: center;
+}
+
+mat-card-actions button {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 12px 40px;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #ff6f61, #ff4081);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 65, 129, 0.3);
+  transition: all 0.3s ease;
+}
+
+mat-card-actions button:hover {
+  background: linear-gradient(90deg, #ff4081, #ff6f61);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 65, 129, 0.5);
+}
+
+/* Reviews Section */
+.reviews-section {
+  margin-top: 60px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 40px;
+  text-align: center;
+  position: relative;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6f61, #ff4081);
+  border-radius: 4px;
+}
+
+.reviews-list {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+}
+
+.review-item {
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background 0.3s ease;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-item:hover {
+  background: rgba(255, 65, 129, 0.03);
+}
+
+.review-item p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.review-item p strong {
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+/* Add Review Section */
+.add-review-section {
+  margin-top: 60px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.form-field mat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #666;
+}
+
+.form-field input,
+.form-field textarea {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #1a1a1a;
+}
+
+.form-field input {
+  padding: 10px;
+}
+
+.form-field textarea {
+  min-height: 100px;
+  resize: vertical;
+  padding: 10px;
+}
+
+.form-field ::ng-deep .mat-form-field-outline {
+  color: #ff4081 !important;
+}
+
+.form-field ::ng-deep .mat-form-field-outline-thick {
+  color: #ff6f61 !important;
+}
+
+.review-form button {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #ff6f61, #ff4081);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 65, 129, 0.3);
+  transition: all 0.3s ease;
+  align-self: center;
+}
+
+.review-form button:hover {
+  background: linear-gradient(90deg, #ff4081, #ff6f61);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 65, 129, 0.5);
+}
+
+.login-prompt {
+  text-align: center;
+  font-size: 1rem;
+  color: #666;
+}
+
+.login-prompt a {
+  color: #ff4081;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.login-prompt a:hover {
+  color: #ff6f61;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .hotel-details-card {
-    margin-bottom: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
+}
+
+.hotel-details-card,
+.reviews-section,
+.add-review-section {
+  animation: fadeInUp 1s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .hotel-image {
+    height: 350px;
+  }
+
+  mat-card-title {
+    font-size: 2.2rem;
+  }
+
+  mat-card-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .hotel-price {
+    font-size: 1.3rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hotel-details-container {
+    padding: 30px 15px;
+  }
+
   .hotel-image {
     height: 300px;
-    object-fit: cover;
-    border-radius: 16px 16px 0 0;
   }
-  
+
+  mat-card-title {
+    font-size: 2rem;
+  }
+
+  mat-card-subtitle {
+    font-size: 1rem;
+  }
+
   .hotel-price {
-    font-weight: 500;
-    margin-top: 8px;
+    font-size: 1.2rem;
+  }
+
+  mat-card-header,
+  mat-card-content,
+  mat-card-actions {
+    padding: 20px;
+  }
+
+  mat-card-actions button {
+    padding: 10px 30px;
     font-size: 1.1rem;
-    color: #3e3e3e;
   }
-  
-  .reviews-section, .add-review-section {
-    margin-top: 40px;
-  }
-  
+
   .section-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #3f51b5;
-    margin-bottom: 15px;
+    font-size: 1.8rem;
   }
-  
-  .reviews-list {
-    background: #fff;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+  .add-review-section {
+    padding: 30px 20px;
   }
-  
-  .review-item {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
+}
+
+@media (max-width: 480px) {
+  .hotel-image {
+    height: 250px;
   }
-  
-  .review-item:last-child {
-    border-bottom: none;
+
+  mat-card-title {
+    font-size: 1.8rem;
   }
-  
-  .add-review-section .form-field {
-    width: 100%;
-    margin-bottom: 20px;
+
+  mat-card-subtitle {
+    font-size: 0.95rem;
   }
-  
-  .login-prompt {
-    margin-top: 15px;
-    color: #888;
+
+  .hotel-price {
+    font-size: 1.1rem;
   }
-  
-  mat-form-field {
-    margin-bottom: 20px;
+
+  mat-card-content p {
+    font-size: 1rem;
   }
-  
-  mat-raised-button {
-    margin-top: 10px;
+
+  mat-card-actions button {
+    padding: 8px 25px;
+    font-size: 1rem;
   }
-  
+
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  .review-item p {
+    font-size: 0.95rem;
+  }
+
+  .add-review-section {
+    padding: 20px 15px;
+  }
+
+  .review-form button {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+}

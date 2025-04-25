@@ -34,9 +34,11 @@
             </span>
           </div>
           <div class="hotel-actions">
+            <button class="btn btn-primary m-2"  [routerLink]="['/hotels', hotel.id]">View Details</button>
             <button class="btn btn-accent" [routerLink]="['/booking', hotel.id]" [class.disabled]="loading" [disabled]="loading">
               Book Now
             </button>
+            
           </div>
         </div>
       </div>
