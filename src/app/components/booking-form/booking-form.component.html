@@ -1,79 +1,51 @@
-<div class="container booking-form-container">
-  <!-- Loading Spinner -->
+<div class="container booking-container">
   <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
 
-  <!-- Booking Form Section -->
-  <div *ngIf="hotel && !loading" class="booking-form-section">
+  <!-- Booking Form -->
+  <div *ngIf="hotel && !loading" class="form-section">
     <h3 class="section-title">Book Your Stay at {{ hotel.name }}</h3>
-    <form #bookingForm="ngForm" (ngSubmit)="onSubmit()" class="booking-form">
-      <!-- Check-in Date -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Check-in Date</mat-label>
-        <input
-          matInput
-          [matDatepicker]="checkInPicker"
-          [(ngModel)]="booking.check_in"
-          name="check_in"
-          [min]="minDate"
-          [max]="maxDate"
-          required
-        >
+    <form #bookingForm="ngForm" (ngSubmit)="onSubmit()" class="form">
+
+      <!-- Check-in -->
+      <mat-form-field appearance="outline">
+        <mat-label>Check-in</mat-label>
+        <input matInput [matDatepicker]="checkInPicker" [(ngModel)]="booking.check_in" name="check_in" [min]="minDate" [max]="maxDate" required>
         <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
         <mat-datepicker #checkInPicker></mat-datepicker>
       </mat-form-field>
 
-      <!-- Check-out Date -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Check-out Date</mat-label>
-        <input
-          matInput
-          [matDatepicker]="checkOutPicker"
-          [(ngModel)]="booking.check_out"
-          name="check_out"
-          [min]="booking.check_in"
-          [max]="maxDate"
-          required
-        >
+      <!-- Check-out -->
+      <mat-form-field appearance="outline">
+        <mat-label>Check-out</mat-label>
+        <input matInput [matDatepicker]="checkOutPicker" [(ngModel)]="booking.check_out" name="check_out" [min]="booking.check_in" [max]="maxDate" required>
         <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
         <mat-datepicker #checkOutPicker></mat-datepicker>
       </mat-form-field>
 
-      <!-- Number of Guests -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Number of Guests</mat-label>
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="booking.guests"
-          name="guests"
-          min="1"
-          max="10"
-          required
-        >
+      <!-- Guests -->
+      <mat-form-field appearance="outline">
+        <mat-label>Guests</mat-label>
+        <input matInput type="number" [(ngModel)]="booking.guests" name="guests" min="1" max="10" required>
       </mat-form-field>
 
-      <!-- Total Price (Read-only) -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Total Price</mat-label>
-        <input
-          matInput
-          type="text"
-          [value]="calculateTotalPrice() | currency"
-          readonly
-        >
+      <!-- Total -->
+      <mat-form-field appearance="outline">
+        <mat-label>Total</mat-label>
+        <input matInput [value]="calculateTotalPrice() | currency" readonly>
       </mat-form-field>
 
-      <!-- Proceed to Payment Button -->
+      <!-- Submit -->
       <button mat-raised-button color="accent" type="submit" [disabled]="bookingForm.invalid">Proceed to Payment</button>
     </form>
   </div>
 
-  <!-- Payment Section (Shown After Clicking "Proceed to Payment") -->
-  <div *ngIf="showPaymentSection && !loading" class="payment-section">
+  <!-- Payment Form -->
+  <div *ngIf="showPaymentSection && !loading" class="form-section">
     <h3 class="section-title">Payment Details</h3>
-    <form #paymentForm="ngForm" (ngSubmit)="onSubmitPayment()" class="payment-form">
-      <!-- Payment Method Selection -->
-      <mat-form-field appearance="outline" class="form-field">
+    <form #paymentForm="ngForm" (ngSubmit)="onSubmitPayment()" class="form">
+
+      <!-- Payment Method -->
+      <mat-form-field appearance="outline">
         <mat-label>Payment Method</mat-label>
         <mat-select [(ngModel)]="payment.method" name="paymentMethod" required>
           <mat-option value="credit_card">Credit/Debit Card</mat-option>
@@ -82,82 +54,45 @@
         </mat-select>
       </mat-form-field>
 
-      <!-- Credit/Debit Card Details (Shown if Credit Card is Selected) -->
-      <div *ngIf="payment.method === 'credit_card'" class="credit-card-details">
-        <mat-form-field appearance="outline" class="form-field">
+      <!-- Credit Card Fields -->
+      <ng-container *ngIf="payment.method === 'credit_card'">
+        <mat-form-field appearance="outline">
           <mat-label>Card Number</mat-label>
-          <input
-            matInput
-            type="text"
-            [(ngModel)]="payment.cardNumber"
-            name="cardNumber"
-            placeholder="1234 5678 9012 3456"
-            pattern="(\d{4}\s){3}\d{4}"
-            required
-            (input)="formatCardNumber()"
-          >
+          <input matInput [(ngModel)]="payment.cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" required>
         </mat-form-field>
 
-        <div class="card-details-row">
-          <mat-form-field appearance="outline" class="form-field half-width">
-            <mat-label>Expiry Date (MM/YY)</mat-label>
-            <input
-              matInput
-              type="text"
-              [(ngModel)]="payment.expiryDate"
-              name="expiryDate"
-              placeholder="MM/YY"
-              pattern="(0[1-9]|1[0-2])\/[0-9]{2}"
-              required
-            >
+        <div class="row">
+          <mat-form-field appearance="outline" class="half">
+            <mat-label>Expiry (MM/YY)</mat-label>
+            <input matInput [(ngModel)]="payment.expiryDate" name="expiryDate" placeholder="MM/YY" required>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="form-field half-width">
+          <mat-form-field appearance="outline" class="half">
             <mat-label>CVV</mat-label>
-            <input
-              matInput
-              type="text"
-              [(ngModel)]="payment.cvv"
-              name="cvv"
-              pattern="[0-9]{3,4}"
-              required
-            >
+            <input matInput [(ngModel)]="payment.cvv" name="cvv" required>
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline" class="form-field">
+        <mat-form-field appearance="outline">
           <mat-label>Cardholder Name</mat-label>
-          <input
-            matInput
-            type="text"
-            [(ngModel)]="payment.cardholderName"
-            name="cardholderName"
-            required
-          >
+          <input matInput [(ngModel)]="payment.cardholderName" name="cardholderName" required>
         </mat-form-field>
-      </div>
+      </ng-container>
 
-      <!-- PayPal Email (Shown if PayPal is Selected) -->
-      <mat-form-field *ngIf="payment.method === 'paypal'" appearance="outline" class="form-field">
+      <!-- PayPal Email -->
+      <mat-form-field *ngIf="payment.method === 'paypal'" appearance="outline">
         <mat-label>PayPal Email</mat-label>
-        <input
-          matInput
-          type="email"
-          [(ngModel)]="payment.paypalEmail"
-          name="paypalEmail"
-          required
-        >
+        <input matInput type="email" [(ngModel)]="payment.paypalEmail" name="paypalEmail" required>
       </mat-form-field>
 
-      <!-- Bank Transfer Details (Shown if Bank Transfer is Selected) -->
-      <div *ngIf="payment.method === 'bank_transfer'" class="bank-transfer-details">
-        <p>Please transfer the total amount to the following account:</p>
-        <p><strong>Bank Name:</strong> Example Bank</p>
-        <p><strong>Account Number:</strong> 1234567890</p>
-        <p><strong>Routing Number:</strong> 0987654321</p>
+      <!-- Bank Transfer Info -->
+      <div *ngIf="payment.method === 'bank_transfer'">
+        <p>Please transfer the amount to:</p>
+        <p><strong>Bank:</strong> Example Bank</p>
+        <p><strong>Account:</strong> 1234567890</p>
+        <p><strong>Routing:</strong> 0987654321</p>
       </div>
 
-      <!-- Confirm Payment Button -->
       <button mat-raised-button color="primary" type="submit" [disabled]="paymentForm.invalid">Confirm Payment</button>
     </form>
   </div>

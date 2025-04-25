@@ -1,431 +1,56 @@
-
-/* Container */
 .container.booking-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(180deg, #f7f9fc 0%, #e8ecef 100%);
-  min-height: calc(100vh - 80px); /* Adjust for navbar height */
-}
-
-/* Loading Spinner */
-.loading-spinner {
-  display: block;
-  margin: 50px auto;
-  --mdc-circular-progress-active-indicator-color: #ff4081;
-}
-
-/* Hotel Details Section */
-.hotel-details-section {
-  margin-bottom: 60px;
-}
-
-.hotel-details-card {
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.hotel-details-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-}
-
-.hotel-image {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  transition: transform 0.5s ease;
-}
-
-.hotel-details-card:hover .hotel-image {
-  transform: scale(1.05);
-}
-
-mat-card-header {
-  padding: 30px;
-  background: rgba(255, 255, 255, 0.95);
-}
-
-mat-card-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 10px;
-}
-
-mat-card-subtitle {
-  font-size: 1.2rem;
-  color: #666;
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-mat-card-subtitle::before {
-  content: '\f3c5';
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
-  color: #ff4081;
+.loading-spinner {
+  margin: auto;
 }
 
-mat-card-content {
-  padding: 0 30px 30px;
-}
-
-.hotel-price {
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 15px;
-}
-
-mat-card-content p {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.8;
-}
-
-/* Reviews Section */
-.reviews-section {
-  margin-top: 60px;
+.form-section {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 40px;
-  text-align: center;
-  position: relative;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
 }
 
-.section-title::before {
-  content: '';
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(90deg, #ff6f61, #ff4081);
-  border-radius: 4px;
-}
-
-.reviews-list {
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-  padding: 20px;
-}
-
-.review-item {
-  padding: 15px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  transition: background 0.3s ease;
-}
-
-.review-item:last-child {
-  border-bottom: none;
-}
-
-.review-item:hover {
-  background: rgba(255, 65, 129, 0.03);
-}
-
-.review-item p {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.6;
-}
-
-.review-item p strong {
-  color: #1a1a1a;
-  font-weight: 500;
-}
-
-/* Booking Form Section */
-.booking-form-section {
-  margin-top: 60px;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-}
-
-.booking-form {
+.form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  max-width: 600px;
-  margin: 0 auto;
+  gap: 1.25rem;
 }
 
-.form-field {
+.row {
+  display: flex;
+  gap: 1rem;
+}
+
+.half {
+  flex: 1;
+}
+
+mat-form-field {
   width: 100%;
 }
 
-.form-field mat-label {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  color: #666;
-}
-
-.form-field input {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  color: #1a1a1a;
-  padding: 10px;
-}
-
-.form-field ::ng-deep .mat-form-field-outline {
-  color: #ff4081 !important;
-}
-
-.form-field ::ng-deep .mat-form-field-outline-thick {
-  color: #ff6f61 !important;
-}
-
-.booking-form button {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 500;
-  padding: 12px 30px;
-  border-radius: 30px;
-  background: linear-gradient(90deg, #ff6f61, #ff4081);
-  color: white;
-  box-shadow: 0 4px 15px rgba(255, 65, 129, 0.3);
-  transition: all 0.3s ease;
-  align-self: center;
-}
-
-.booking-form button:hover {
-  background: linear-gradient(90deg, #ff4081, #ff6f61);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 65, 129, 0.5);
-}
-
-.booking-form button:disabled {
-  background: #ccc;
-  box-shadow: none;
-  cursor: not-allowed;
-}
-
-.login-prompt {
-  text-align: center;
-  font-size: 1rem;
-  color: #666;
-}
-
-.login-prompt a {
-  color: #ff4081;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.login-prompt a:hover {
-  color: #ff6f61;
-}
-
-/* Payment Section */
-.payment-section {
-  margin-top: 60px;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-}
-
-.payment-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.credit-card-details,
-.bank-transfer-details {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.card-details-row {
-  display: flex;
-  gap: 20px;
-}
-
-.form-field.half-width {
-  width: 50%;
-}
-
-.bank-transfer-details p {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.6;
-}
-
-.bank-transfer-details p strong {
-  color: #1a1a1a;
-}
-
-.payment-form button {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 500;
-  padding: 12px 30px;
-  border-radius: 30px;
-  background: linear-gradient(90deg, #1976d2, #42a5f5);
-  color: white;
-  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
-  transition: all 0.3s ease;
-  align-self: center;
-}
-
-.payment-form button:hover {
-  background: linear-gradient(90deg, #42a5f5, #1976d2);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(25, 118, 210, 0.5);
-}
-
-.payment-form button:disabled {
-  background: #ccc;
-  box-shadow: none;
-  cursor: not-allowed;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hotel-details-section,
-.booking-form-section,
-.payment-section {
-  animation: fadeInUp 1s ease-out;
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .hotel-image {
-    height: 350px;
-  }
-
-  mat-card-title {
-    font-size: 2.2rem;
-  }
-
-  mat-card-subtitle {
-    font-size: 1.1rem;
-  }
-
-  .hotel-price {
-    font-size: 1.3rem;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .booking-container {
-    padding: 30px 15px;
-  }
-
-  .hotel-image {
-    height: 300px;
-  }
-
-  mat-card-title {
-    font-size: 2rem;
-  }
-
-  mat-card-subtitle {
-    font-size: 1rem;
-  }
-
-  .hotel-price {
-    font-size: 1.2rem;
-  }
-
-  mat-card-header,
-  mat-card-content {
-    padding: 20px;
-  }
-
-  .section-title {
-    font-size: 1.8rem;
-  }
-
-  .booking-form-section,
-  .payment-section {
-    padding: 30px 20px;
-  }
-
-  .card-details-row {
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .row {
     flex-direction: column;
-    gap: 20px;
-  }
-
-  .form-field.half-width {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .hotel-image {
-    height: 250px;
-  }
-
-  mat-card-title {
-    font-size: 1.8rem;
-  }
-
-  mat-card-subtitle {
-    font-size: 0.95rem;
-  }
-
-  .hotel-price {
-    font-size: 1.1rem;
-  }
-
-  mat-card-content p {
-    font-size: 1rem;
   }
 
   .section-title {
-    font-size: 1.6rem;
-  }
-
-  .review-item p {
-    font-size: 0.95rem;
-  }
-
-  .booking-form-section,
-  .payment-section {
-    padding: 20px 15px;
-  }
-
-  .booking-form button,
-  .payment-form button {
-    padding: 10px 25px;
-    font-size: 1rem;
+    font-size: 1.25rem;
   }
 }
