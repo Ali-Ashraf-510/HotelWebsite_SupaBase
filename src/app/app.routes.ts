@@ -6,7 +6,7 @@ import { BookingFormComponent } from './components/booking-form/booking-form.com
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';   
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { MyBookingsComponent } from './my-bookings/my-bookings.component'; // Ensure this path is correct or update it to the correct file location
+import { MyBookingsComponent } from './my-bookings/my-bookings.component'; 
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,8 +14,14 @@ export const routes: Routes = [
   { path: 'hotels', component: HotelListComponent },
   {path: 'about', component: AboutComponent},
   { path: 'hotels/:id', component: HotelDetailsComponent },
-  { path: 'booking/:id', component: BookingFormComponent },
-  { path: 'my-bookings', component: MyBookingsComponent },
+  { 
+    path: 'booking/:id', 
+    loadComponent: () => import('./components/booking-form/booking-form.component').then(m => m.BookingFormComponent) 
+  },
+  { 
+    path: 'my-bookings', 
+    loadComponent: () => import('./my-bookings/my-bookings.component').then(m => m.MyBookingsComponent) 
+  },
   { path: 'auth', component: AuthComponent },
   { path: 'signup', component: SignUpComponent },
 ];
