@@ -1,40 +1,70 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SupabaseService } from '../../services/supabase.service';
-import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon'; // لو حابب تستخدم أيقونة الموبايل
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { User } from '@supabase/supabase-js';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatToolbarModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterLinkActive,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit {
-  user: any = null;
+export class NavbarComponent implements OnInit, OnDestroy {
   isMenuOpen: boolean = false;
+  isDropdownOpen: boolean = false;
+  user: User | null = null;
+  userName: string | null = null;
+  private userSubscription: Subscription | null = null;
 
-  constructor(
-    private supabaseService: SupabaseService,
-    private router: Router
-  ) {}
+  constructor(private supabaseService: SupabaseService, private router: Router) {}
 
   ngOnInit() {
-    this.supabaseService.currentUser.subscribe(user => {
+    // Subscribe to currentUser to get user and name
+    this.userSubscription = this.supabaseService.currentUser.subscribe((user) => {
       this.user = user;
+      this.userName = user?.user_metadata?.['name'] || null;
     });
   }
 
-  async signOut() {
-    await this.supabaseService.signOut();
-    this.user = null;
-    this.router.navigate(['/hotels']);
+  ngOnDestroy() {
+    // Clean up subscription
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+    if (this.isMenuOpen) {
+      this.isDropdownOpen = false; // Close dropdown when opening mobile menu
+    }
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  async signOut() {
+    try {
+      await this.supabaseService.signOut();
+      this.isMenuOpen = false;
+      this.isDropdownOpen = false;
+      this.router.navigate(['/auth']);
+    } catch (error) {
+      console.error('Sign-out error:', error);
+    }
   }
 }

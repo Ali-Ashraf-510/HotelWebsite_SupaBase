@@ -1,59 +1,117 @@
-<mat-toolbar class="custom-navbar" >
-    <div class="navbar-container">
-      <button mat-icon-button class="mobile-toggle" [class.open]="isMenuOpen" (click)="toggleMenu()" aria-label="Toggle navigation menu">
-        <mat-icon>{{isMenuOpen ? 'close' : 'menu'}}</mat-icon>
-      </button>
-  
-      <a class="logo" routerLink="/">
-        <mat-icon class="logo-icon">hotel</mat-icon>
-        <span class="logo-text">Stay<span>Sphere</span></span>
-      </a>
-  
-      <span class="spacer"></span>
-  
-      <div class="menu" [class.open]="isMenuOpen">
-        <button mat-button class="nav-link" routerLink="/" routerLinkActive="active">
-          <mat-icon>home</mat-icon> Home
-        </button>
-        
-        <button mat-button class="nav-link" routerLink="/hotels" routerLinkActive="active" >
-          <mat-icon>search</mat-icon> Find Hotels
-        </button>
-        
-        
-        <button mat-button class="nav-link" routerLink="/about" routerLinkActive="active" >
-          <mat-icon>info</mat-icon> About
-        </button>
-        
-        <button mat-button class="nav-link" routerLink="/contact" routerLinkActive="active" >
-          <mat-icon>email</mat-icon> Contact
-        </button>
-        
-        <div class="auth-buttons">
-          <ng-container *ngIf="!user; else userLoggedIn">
-            <button mat-stroked-button class="sign-in-btn" routerLink="/auth" >
-              <mat-icon>login</mat-icon> Sign In
-            </button>
-            <button mat-stroked-button class="sign-in-btn" routerLink="/signup" >
-              <mat-icon>sign up</mat-icon> Sign Up
-            </button>
-          </ng-container>
-          
-          <ng-template #userLoggedIn>
-            <button mat-stroked-button class="sign-out-btn" (click)="signOut()">
-              <mat-icon>logout</mat-icon> Sign Out
-            </button>
-            <button mat-button class="nav-link" routerLink="/my-bookings" routerLinkActive="active">
-              <mat-icon>event_note</mat-icon> My Bookings
-            </button>
-            
-          </ng-template>
-        </div>
-      </div>
-      
-      <!-- User Avatar - Only shown when logged in and on desktop -->
-    
-      <!-- User dropdown menu -->
+<mat-toolbar class="custom-navbar">
+  <div class="navbar-container">
+    <!-- Mobile menu toggle -->
+    <button
+      mat-icon-button
+      class="mobile-toggle"
+      [class.open]="isMenuOpen"
+      (click)="toggleMenu()"
+      aria-label="Toggle navigation menu"
+    >
+      <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+    </button>
 
+    <!-- Logo -->
+    <a class="logo" routerLink="/">
+      <mat-icon class="logo-icon">hotel</mat-icon>
+      <span class="logo-text">Stay<span>Sphere</span></span>
+    </a>
+
+    <!-- Spacer -->
+    <span class="spacer"></span>
+
+    <!-- Navigation menu -->
+    <div class="menu" [class.open]="isMenuOpen">
+      <button
+        mat-button
+        class="nav-link"
+        routerLink="/"
+        routerLinkActive="active"
+        aria-label="Home"
+      >
+        <mat-icon>home</mat-icon> Home
+      </button>
+
+      <button
+        mat-button
+        class="nav-link"
+        routerLink="/hotels"
+        routerLinkActive="active"
+        aria-label="Find Hotels"
+      >
+        <mat-icon>search</mat-icon> Find Hotels
+      </button>
+
+      <button
+        mat-button
+        class="nav-link"
+        routerLink="/about"
+        routerLinkActive="active"
+        aria-label="About"
+      >
+        <mat-icon>info</mat-icon> About
+      </button>
+
+      <!-- Removed Contact button -->
+      
+      <!-- Auth buttons or user menu -->
+      <div class="auth-buttons">
+        <ng-container *ngIf="!user; else userLoggedIn">
+          <button
+            mat-stroked-button
+            class="sign-in-btn"
+            routerLink="/auth"
+            aria-label="Sign In"
+          >
+            <mat-icon>login</mat-icon> Sign In
+          </button>
+          <button
+            mat-stroked-button
+            class="sign-in-btn"
+            routerLink="/signup"
+            aria-label="Sign Up"
+          >
+            <mat-icon>person_add</mat-icon> Sign Up
+          </button>
+        </ng-container>
+
+        <ng-template #userLoggedIn>
+          <!-- User avatar and name with dropdown -->
+          <div class="user-menu" (click)="toggleDropdown()" tabindex="0" (keydown.enter)="toggleDropdown()" aria-label="User menu">
+            <div class="user-info">
+              <span class="user-name">{{ userName || 'User' }}</span>
+              <mat-icon class="user-icon">account_circle</mat-icon>
+            </div>
+            <div class="dropdown" [class.open]="isDropdownOpen">
+              <button
+                mat-button
+                class="dropdown-item"
+                routerLink="/my-bookings"
+                routerLinkActive="active"
+                aria-label="My Bookings"
+              >
+                <mat-icon>event_note</mat-icon> My Bookings
+              </button>
+              <button
+                mat-button
+                class="dropdown-item"
+                routerLink="/profile"
+                aria-label="My Profile"
+              >
+                <mat-icon>person</mat-icon> My Profile
+              </button>
+              <button
+                mat-button
+                class="dropdown-item sign-out"
+                (click)="signOut()"
+                aria-label="Sign Out"
+              >
+                <mat-icon>logout</mat-icon> Sign Out
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </div>
     </div>
-  </mat-toolbar>
+  </div>
+</mat-toolbar>
