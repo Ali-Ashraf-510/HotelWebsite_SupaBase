@@ -32,7 +32,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 export class HomeComponent implements OnInit {
   featuredHotels: any[] = [];
-  searchQuery: string = '';
+
   loading: boolean = false;
 
   constructor(private supabaseService: SupabaseService, private router: Router) {}
@@ -105,11 +105,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  searchHotels() {
-    if (this.searchQuery.trim()) {
-      this.router.navigate(['/hotels'], { queryParams: { search: this.searchQuery } });
-    }
-  }
 
   // دالة لعرض النجوم بناءً على الـ rating
   getStars(rating: number): { class: string }[] {
