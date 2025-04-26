@@ -1,59 +1,82 @@
-# HotelBooking
+# HotelWebsite_SupaBase
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
+## Project Overview
 
-## Development server
+HotelWebsite_SupaBase is a luxurious hotel booking web application built with Angular and integrated with Supabase for backend data management. The application allows users to browse hotels, book stays with date restrictions, process mock payments, and view their bookings. The design is elegant and modern, featuring a coral-to-pink gradient theme, Playfair Display for headings, and Poppins for body text.
 
-To start a local development server, run:
+This project is deployed on Vercel and is actively maintained on GitHub at `github.com/Ali-Ashraf-510/HotelWebsite_SupaBase`.
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Features
 
-## Code scaffolding
+- **Hotel Booking**: Users can book a hotel stay by selecting check-in and check-out dates, specifying the number of guests, and calculating the total price based on the hotel's price per night.
+- **Date Restrictions**: Booking dates are restricted to the current date (e.g., 25 April 2025) and a maximum of 5 days in the future (e.g., 30 April 2025), dynamically calculated.
+- **Payment Simulation**: Supports mock payment processing with three methods: Credit/Debit Card, PayPal, and Bank Transfer. Credit card numbers are formatted with spaces every 4 digits (e.g., `1234 5678 9012 3456`).
+- **My Bookings Page**: Users can view their booking history with details like hotel name, location, dates, total price, and status.
+- **Luxurious Design**: Features a glassmorphic UI with smooth animations, a coral-to-pink gradient (`#ff6f61` to `#ff4081`) for buttons, and a responsive layout.
+- **Supabase Integration**: Uses Supabase for managing hotel data and bookings with tables like `hotels` and `bookings`.
+- **User Authentication**: Requires users to log in to book a stay or view their bookings.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## Tech Stack
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- **Frontend**: Angular 17 (Standalone Components)
+- **Backend**: Supabase (PostgreSQL database for storing hotels and bookings)
+- **Styling**: Angular Material, Bootstrap (customized), Custom CSS with Playfair Display and Poppins fonts
+- **Deployment**: Vercel
+- **Version Control**: GitHub (`github.com/Ali-Ashraf-510/HotelWebsite_SupaBase`)
 
-```bash
-ng generate --help
-```
+---
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Project Structure
 
 ```bash
-ng test
+HotelWebsite_SupaBase/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── booking-form/           # Component for booking a hotel stay
+│   │   │   │   ├── booking-form.component.ts
+│   │   │   │   ├── booking-form.component.html
+│   │   │   │   └── booking-form.component.css
+│   │   │   ├── my-bookings/            # Component for viewing user's bookings
+│   │   │   │   ├── my-bookings.component.ts
+│   │   │   │   ├── my-bookings.component.html
+│   │   │   │   └── my-bookings.component.css
+│   │   │   └── navbar/                 # Navbar component (optional, for navigation)
+│   │   │       ├── navbar.component.ts
+│   │   │       ├── navbar.component.html
+│   │   │       └── navbar.component.css
+│   │   ├── services/
+│   │   │   └── supabase.service.ts     # Service for Supabase client and API calls
+│   │   ├── app.component.ts            # Root component
+│   │   ├── app.routes.ts               # Routing configuration
+│   │   └── styles.css                  # Global styles
+├── angular.json                        # Angular configuration (budgets, build options)
+├── package.json                        # Dependencies and scripts
+└── README.txt                          # Project documentation
+
 ```
 
-## Running end-to-end tests
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## Prerequisites
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Before you begin, ensure you have the following installed:
 
-## Additional Resources
+- Node.js (v18 or later)
+- npm (v9 or later)
+- Angular CLI (`npm install -g @angular/cli`)
+- Git
+- A Supabase account and project for backend data
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+
+
+
+
+
