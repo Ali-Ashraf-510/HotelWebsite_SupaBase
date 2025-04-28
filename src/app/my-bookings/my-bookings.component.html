@@ -8,33 +8,45 @@
 
     <!-- No Bookings Message -->
     <p *ngIf="bookings.length === 0" class="no-bookings">
-      You have no bookings yet. <a routerLink="/hotels">Book now!</a>
+      You have no bookings yet. <a routerLink="/hotels" class="book-now-link">Book now!</a>
     </p>
 
     <!-- Bookings List -->
     <div class="bookings-grid">
       <mat-card *ngFor="let booking of bookings" class="booking-card">
+        <div class="booking-image" *ngIf="booking.hotels.image_url">
+          <img [src]="booking.hotels.image_url" [alt]="booking.hotels.name" />
+        </div>
         <mat-card-header>
           <mat-card-title>{{ booking.hotels.name }}</mat-card-title>
           <mat-card-subtitle>{{ booking.hotels.location }}</mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
-          <p><strong>Check-in:</strong> {{ booking.check_in | date:'mediumDate' }}</p>
-          <p><strong>Check-out:</strong> {{ booking.check_out | date:'mediumDate' }}</p>
+          <p><strong>Check-in:</strong> {{ booking.check_in | date: 'mediumDate' }}</p>
+          <p><strong>Check-out:</strong> {{ booking.check_out | date: 'mediumDate' }}</p>
           <p><strong>Total Price:</strong> {{ booking.total_price | currency }}</p>
-          <p [ngClass]="{
-            'status-confirmed': booking.status === 'confirmed',
-            'status-pending': booking.status === 'pending',
-            'status-cancelled': booking.status === 'cancelled'
-          }">
-            <strong>Status:</strong> {{ booking.status }}
+          <p
+            [ngClass]="{
+              'status-confirmed': booking.status === 'confirmed',
+              'status-pending': booking.status === 'pending',
+              'status-cancelled': booking.status === 'cancelled'
+            }"
+          >
+            <strong>Status:</strong> {{ booking.status | titlecase }}
           </p>
         </mat-card-content>
 
         <mat-card-actions>
           <button mat-raised-button color="accent" (click)="bookAnother()">Book Another Stay</button>
-          <button mat-raised-button color="warn" (click)="cancelBooking(booking.id)">Cancel Booking</button>
+          <button
+            mat-raised-button
+            color="warn"
+            (click)="cancelBooking(booking.id)"
+            [disabled]="booking.status !== 'confirmed' && booking.status !== 'pending'"
+          >
+            Cancel Booking
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>
