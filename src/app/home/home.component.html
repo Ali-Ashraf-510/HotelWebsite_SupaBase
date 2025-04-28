@@ -28,7 +28,7 @@
             </span>
           </div>
           <div class="hotel-actions">
-            <button class="btn btn-primary m-2"  [routerLink]="['/hotels', hotel.id]">View Details</button>
+            <button class="btn btn-primary"  [routerLink]="['/hotels', hotel.id]">View Details</button>
             <button class="btn btn-accent" [routerLink]="['/booking', hotel.id]" [class.disabled]="loading" [disabled]="loading">
               Book Now
             </button>
@@ -40,53 +40,53 @@
   </div>
 
   <!-- Features Section -->
-  <section class="features-section">
+  <section class="features-section py-5 bg-light">
     <div class="container">
       <div class="text-center mb-5">
-        <h2>Why Choose <span class="highlight">Us</span></h2>
-        <p class="section-subtitle">Features that make us stand out</p>
+      <h2 class="display-4 fw-bold">Why Choose <span class="highlight text-primary">Us</span></h2>
+      <p class="section-subtitle text-muted fs-5">Discover the features that set us apart</p>
       </div>
-
-      <div class="row align-items-center">
-        <div class="col-lg-6">
-          <img src="https://images.unsplash.com/photo-1707172308283-e2d1e44d0be3?q=80&w=1300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Features" class="img-fluid rounded shadow">
-        </div>
-
-        <div class="col-lg-6">
-          <div class="features-list">
-            <div class="feature-item d-flex align-items-start mb-4">
-              <i class="fas fa-globe feature-icon me-3"></i>
-              <div>
-                <h4>Global Selection</h4>
-                <p>Access to over 500,000 hotels worldwide, from luxury resorts to boutique guesthouses in 190+ countries.</p>
-              </div>
-            </div>
-
-            <div class="feature-item d-flex align-items-start mb-4">
-              <i class="fas fa-mobile-alt feature-icon me-3"></i>
-              <div>
-                <h4>Mobile Friendly</h4>
-                <p>Book on the go with our responsive mobile app. Access your bookings, check in details, and get directions with ease.</p>
-              </div>
-            </div>
-
-            <div class="feature-item d-flex align-items-start mb-4">
-              <i class="fas fa-shield-alt feature-icon me-3"></i>
-              <div>
-                <h4>Secure Payments</h4>
-                <p>Industry-leading encryption and security protocols ensure your payment information is always protected.</p>
-              </div>
-            </div>
-
-            <div class="feature-item d-flex align-items-start">
-              <i class="fas fa-credit-card feature-icon me-3"></i>
-              <div>
-                <h4>No Hidden Fees</h4>
-                <p>Transparent pricing with all applicable taxes and fees clearly displayed before you complete your booking.</p>
-              </div>
-            </div>
+    
+      <div class="row g-4">
+      <div class="col-12">
+        <div class="features-list">
+        <div class="feature-item d-flex align-items-start mb-4 p-3 rounded bg-white shadow-sm animate__animated animate__fadeIn" data-wow-delay="0.1s">
+          <i class="fas fa-globe feature-icon me-4 text-primary fs-3"></i>
+          <div>
+          <h4 class="fw-semibold">Global Reach</h4>
+          <p class="text-muted">Explore over 500,000 hotels in 190+ countries, from luxury retreats to cozy boutique stays, all at your fingertips.</p>
           </div>
         </div>
+    
+        <div class="feature-item d-flex align-items-start mb-4 p-3 rounded bg-white shadow-sm animate__animated animate__fadeIn" data-wow-delay="0.2s">
+          <i class="fas fa-mobile-alt feature-icon me-4 text-primary fs-3"></i>
+          <div>
+          <h4 class="fw-semibold">Seamless Mobile Experience</h4>
+          <p class="text-muted">Book anytime, anywhere with our intuitive mobile app. Manage bookings, view check-in details, and navigate effortlessly.</p>
+          </div>
+        </div>
+    
+        <div class="feature-item d-flex align-items-start mb-4 p-3 rounded bg-white shadow-sm animate__animated animate__fadeIn" data-wow-delay="0.3s">
+          <i class="fas fa-shield-alt feature-icon me-4 text-primary fs-3"></i>
+          <div>
+          <h4 class="fw-semibold">Trusted Security</h4>
+          <p class="text-muted">Your payments are safeguarded with cutting-edge encryption and robust security measures for complete peace of mind.</p>
+          </div>
+        </div>
+    
+        <div class="feature-item d-flex align-items-start mb-4 p-3 rounded bg-white shadow-sm animate__animated animate__fadeIn" data-wow-delay="0.4s">
+          <i class="fas fa-credit-card feature-icon me-4 text-primary fs-3"></i>
+          <div>
+          <h4 class="fw-semibold">Transparent Pricing</h4>
+          <p class="text-muted">Enjoy clear, upfront pricing with no hidden fees—taxes and charges are fully disclosed before you book.</p>
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
+    
+      <div class="text-center mt-5">
+      <a routerLink="/hotels" class="btn btn-primary btn-lg px-5 py-3">Start Booking Now</a>
       </div>
     </div>
   </section>
