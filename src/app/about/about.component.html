@@ -1,28 +1,96 @@
 <div class="about-wrapper">
-    <div class="about-container">
-      <mat-card class="about-card" @fadeIn>
-        <mat-card-header>
-          <mat-card-title class="card-title">About StaySphere</mat-card-title>
-        </mat-card-header>
+  <!-- Hero Section -->
+  <section class="hero-section" @fadeIn>
+    <div class="hero-content">
+      <h1 class="hero-title">Discover StaySphere</h1>
+      <p class="hero-subtitle">Your trusted partner for unforgettable travel experiences.</p>
+      <button mat-raised-button color="primary" class="hero-cta" [routerLink]="['/hotels']">
+        <mat-icon>search</mat-icon> Explore Hotels
+      </button>
+    </div>
+  </section>
+
+  <!-- About Content -->
+  <div class="about-container">
+    <mat-card class="about-card" @fadeIn>
+      <mat-card-header>
+        <mat-card-title class="card-title">About StaySphere</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="intro">
+          Welcome to <strong>StaySphere</strong>, the ultimate platform for finding and booking your perfect hotel, wherever your journey takes you.
+        </p>
+        <h3>Our Mission</h3>
+        <p>
+          At StaySphere, we’re dedicated to making travel planning effortless and enjoyable. Our goal is to connect travelers with exceptional accommodations worldwide, providing a seamless booking experience backed by outstanding customer support.
+        </p>
+        <h3>Why Choose StaySphere?</h3>
+        <ul class="features-list">
+          <li><mat-icon>hotel</mat-icon> Diverse range of hotels to match any budget or preference.</li>
+          <li><mat-icon>calendar_today</mat-icon> Intuitive booking with real-time availability and instant confirmation.</li>
+          <li><mat-icon>verified</mat-icon> Secure, reliable reservations trusted by thousands of travelers.</li>
+        </ul>
+        <h3>Our Story</h3>
+        <p>
+          Founded with a passion for travel, StaySphere was created to simplify the way people discover and book accommodations. We combine cutting-edge technology with a deep understanding of travelers’ needs to deliver a platform that’s both powerful and user-friendly.
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+      <h2 class="section-title" @fadeIn>What Our Travelers Say</h2>
+      <div class="testimonials-grid">
+        <mat-card class="testimonial-card" *ngFor="let testimonial of testimonials" @fadeInUp>
+          <mat-card-content>
+            <p class="testimonial-text">"{{ testimonial.text }}"</p>
+            <p class="testimonial-author">- {{ testimonial.author }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-section" @fadeIn>
+      <h2 class="section-title">Get in Touch</h2>
+      <mat-card class="contact-card">
         <mat-card-content>
-          <p class="intro">
-            Welcome to <strong>StaySphere</strong>, your ultimate platform for finding and booking the perfect hotel for your next adventure.
-          </p>
-          <h3>Our Mission</h3>
-          <p>
-            At StaySphere, we aim to make travel planning seamless and enjoyable. Our mission is to connect travelers with exceptional accommodations worldwide, offering a user-friendly experience and unparalleled customer support.
-          </p>
-          <h3>Why Choose Us?</h3>
-          <ul>
-            <li>Wide selection of hotels to suit every budget and preference.</li>
-            <li>Easy-to-use booking system with real-time availability.</li>
-            <li>Trusted by thousands of travelers for secure and reliable reservations.</li>
-          </ul>
-          <h3>Our Team</h3>
-          <p>
-            We are a passionate team dedicated to revolutionizing the travel industry. Based in [Your City], our diverse group of developers, designers, and travel enthusiasts work together to bring you the best booking experience.
-          </p>
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmitContactForm()" class="contact-form">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name" required>
+              <mat-error *ngIf="contactForm.get('name')?.touched && contactForm.get('name')?.invalid">
+                {{ getErrorMessage('name') }}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" type="email" required>
+              <mat-error *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.invalid">
+                {{ getErrorMessage('email') }}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Subject</mat-label>
+              <input matInput formControlName="subject">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Message</mat-label>
+              <textarea matInput formControlName="message" rows="5" required></textarea>
+              <mat-error *ngIf="contactForm.get('message')?.touched && contactForm.get('message')?.invalid">
+                {{ getErrorMessage('message') }}
+              </mat-error>
+            </mat-form-field>
+            <div class="form-actions">
+              <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting || contactForm.invalid">
+                <mat-icon *ngIf="!isSubmitting">send</mat-icon>
+                <mat-icon *ngIf="isSubmitting" class="spinner">loop</mat-icon>
+                {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+              </button>
+            </div>
+          </form>
         </mat-card-content>
       </mat-card>
-    </div>
+    </section>
   </div>
+</div>

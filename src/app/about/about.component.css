@@ -1,106 +1,304 @@
-/* Import Google Fonts for modern typography */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
-/* Wrapper for background styling */
+/* About Wrapper */
 .about-wrapper {
+  background: #F9FAFB;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #e0e7ff 0%, #bbdefb 100%);
-  padding: 20px;
 }
 
-/* Container for centering the card */
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.hero-content {
+  padding: 2rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+.hero-cta {
+  background-color: #3B82F6;
+  color: #FFFFFF;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.hero-cta:hover {
+  background-color: #2563EB;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* About Container */
 .about-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
 }
 
-/* Card styling */
+/* About Card */
 .about-card {
-  background: #ffffff;
+  background: #FFFFFF;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  width: 100%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
 }
 
 .about-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
 }
 
-/* Card title */
 .card-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 28px;
-  font-weight: 600;
-  color: #333;
-  text-align: center;
-  margin-bottom: 16px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1F2A44;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Content styling */
+.intro {
+  font-size: 1.1rem;
+  color: #6B7280;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
 .about-card h3 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 20px;
-  font-weight: 500;
-  color: #007bff;
-  margin: 16px 0 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1F2A44;
+  margin: 1.5rem 0 1rem;
 }
 
 .about-card p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  color: #333;
+  color: #6B7280;
   line-height: 1.6;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
-.about-card .intro {
-  font-size: 18px;
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+
+.features-list li {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #1F2A44;
+  margin-bottom: 0.75rem;
+}
+
+.features-list mat-icon {
+  color: #3B82F6;
+  margin-right: 0.75rem;
+  font-size: 20px;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+  margin-top: 3rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1F2A44;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+}
+
+.testimonial-text {
+  font-size: 1rem;
+  color: #6B7280;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.testimonial-author {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1F2A44;
+}
+
+/* Contact Form Section */
+.contact-section {
+  margin-top: 3rem;
+}
+
+.contact-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.form-field mat-label {
+  color: #1F2A44;
   font-weight: 500;
-  color: #333;
 }
 
-.about-card ul {
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  color: #333;
-  list-style-type: disc;
-  padding-left: 20px;
-  margin-bottom: 16px;
+.form-field input,
+.form-field textarea {
+  color: #1F2A44;
 }
 
-.about-card ul li {
-  margin-bottom: 8px;
+.form-field textarea {
+  min-height: 100px;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-  .about-container {
-    padding: 16px;
+.form-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.form-actions button {
+  background-color: #3B82F6;
+  color: #FFFFFF;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-actions button:hover {
+  background-color: #2563EB;
+}
+
+.form-actions button:disabled {
+  background-color: #6B7280;
+  cursor: not-allowed;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Snackbar */
+.error-snackbar {
+  background-color: #EF4444;
+  color: #FFFFFF;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .hero-section {
+    height: 300px;
   }
 
-  .about-card {
-    padding: 16px;
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+  }
+
+  .about-container {
+    padding: 1.5rem 1rem;
   }
 
   .card-title {
-    font-size: 24px;
+    font-size: 1.75rem;
   }
 
-  .about-card h3 {
-    font-size: 18px;
+  .section-title {
+    font-size: 1.75rem;
   }
 
-  .about-card p,
-  .about-card ul {
-    font-size: 14px;
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card {
+    padding: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-cta {
+    padding: 0.5rem 1rem;
+  }
+
+  .about-card {
+    padding: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
   }
 }
