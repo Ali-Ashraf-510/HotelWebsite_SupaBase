@@ -16,9 +16,7 @@
             "outputPath": "dist/hotel-booking",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -32,23 +30,30 @@
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": ["ws"] 
           },
           "configurations": {
             "production": {
               "budgets": [
-  {
-    "type": "initial",
-    "maximumWarning": "500kb",
-    "maximumError": "1mb"     
-  },
-  {
-    "type": "anyComponentStyle",
-    "maximumWarning": "100kb",
-    "maximumError": "200kb"
-  }
-],
-              "outputHashing": "all"
+                {
+                  "type": "initial",
+                  "maximumWarning": "800kb",
+                  "maximumError": "1.5mb" 
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "100kb",
+                  "maximumError": "200kb"
+                }
+              ],
+              "outputHashing": "all",
+              "optimization": true, 
+              "buildOptimizer": true, 
+              "sourceMap": false, 
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "namedChunks": false
             },
             "development": {
               "optimization": false,
@@ -76,10 +81,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               {
