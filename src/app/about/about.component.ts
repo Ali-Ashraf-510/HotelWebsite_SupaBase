@@ -40,9 +40,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ]),
   ],
 })
-export class AboutComponent implements OnInit {
-  contactForm: FormGroup;
-  isSubmitting = false;
+export class AboutComponent  {
+
   testimonials = [
     {
       text: 'StaySphere made booking our dream vacation so easy! The platform is intuitive, and the hotel selection is fantastic.',
@@ -58,68 +57,5 @@ export class AboutComponent implements OnInit {
     },
   ];
 
-  constructor(
-    private fb: FormBuilder,
-    private supabaseService: SupabaseService,
-    private snackBar: MatSnackBar
-  ) {
-    this.contactForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      subject: [''],
-      message: ['', [Validators.required, Validators.minLength(10)]],
-    });
-  }
 
-  ngOnInit(): void {}
-
-  async onSubmitContactForm() {
-    if (this.contactForm.invalid) {
-      this.snackBar.open('Please fill out all required fields correctly.', 'Close', {
-        duration: 5000,
-        panelClass: ['error-snackbar'],
-      });
-      return;
-    }
-
-    this.isSubmitting = true;
-    try {
-      const { error, data } = await this.supabaseService.client
-        .from('contact_submissions')
-        .insert({
-          name: this.contactForm.value.name,
-          email: this.contactForm.value.email,
-          subject: this.contactForm.value.subject || 'General Inquiry',
-          message: this.contactForm.value.message,
-          created_at: new Date().toISOString(),
-        });
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw new Error(`Error submitting form: ${error.message}`);
-      }
-
-      console.log('Submission successful:', data);
-      this.contactForm.reset();
-      this.snackBar.open('Thank you for your message! We’ll get back to you soon.', 'Close', {
-        duration: 5000,
-      });
-    } catch (error: any) {
-      console.error('Submission failed:', error);
-      this.snackBar.open(error.message, 'Close', {
-        duration: 5000,
-        panelClass: ['error-snackbar'],
-      });
-    } finally {
-      this.isSubmitting = false;
-    }
-  }
-
-  getErrorMessage(controlName: string): string {
-    const control = this.contactForm.get(controlName);
-    if (control?.hasError('required')) return 'This field is required.';
-    if (control?.hasError('email')) return 'Please enter a valid email address.';
-    if (control?.hasError('minlength')) return `Must be at least ${control.errors?.['minlength'].requiredLength} characters.`;
-    return '';
-  }
 }
