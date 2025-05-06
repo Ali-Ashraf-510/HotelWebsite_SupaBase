@@ -31,7 +31,7 @@
               "src/styles.css"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": ["ws"] 
+            "allowedCommonJsDependencies": ["ws"]
           },
           "configurations": {
             "production": {
@@ -39,7 +39,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "800kb",
-                  "maximumError": "1.5mb" 
+                  "maximumError": "1.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -48,11 +48,18 @@
                 }
               ],
               "outputHashing": "all",
-              "optimization": true, 
-              "buildOptimizer": true, 
-              "sourceMap": false, 
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": {
+                  "inline": true
+                }
+              },
+              "sourceMap": false,
               "extractLicenses": true,
-              "vendorChunk": true,
               "namedChunks": false
             },
             "development": {
