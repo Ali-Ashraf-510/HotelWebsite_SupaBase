@@ -21,8 +21,8 @@ import { CommonModule } from '@angular/common';
     MatButtonModule,
     MatProgressSpinnerModule,
   ],
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css'],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
 })
 export class AuthComponent {
   name: string = ''; // Added name field for sign-up

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { HotelListComponent } from './components/hotel-list/hotel-list.component';
-import { AuthComponent } from './components/auth/auth.component';
+import { AuthComponent } from './components/login/login.component';
 import { HotelDetailsComponent } from './components/hotel-details/hotel-details.component';
 import { BookingFormComponent } from './components/booking-form/booking-form.component';
 import { HomeComponent } from './components/home/home.component';
