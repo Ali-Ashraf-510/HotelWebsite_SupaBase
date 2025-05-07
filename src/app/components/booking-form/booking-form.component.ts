@@ -40,24 +40,19 @@ export class BookingFormComponent implements OnInit {
   };
   loading: boolean = false;
   showPaymentSection: boolean = false;
-
-  // Date Restrictions
   minDate: Date;
   maxDate: Date;
-  cardExpiryMinDate: Date; // Minimum card expiry: Current month (April 2025)
+  cardExpiryMinDate: Date;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private supabaseService: SupabaseService
   ) {
-    // Booking date restrictions
-    this.minDate = new Date(); // Current date (25 April 2025)
+    this.minDate = new Date();
     this.maxDate = new Date();
-    this.maxDate.setDate(this.minDate.getDate() + 5); // 30 April 2025
-
-    // Card expiry restriction: Minimum is current month (April 2025)
-    this.cardExpiryMinDate = new Date(2025, 3, 1); // Start of April 2025
+    this.maxDate.setDate(this.minDate.getDate() + 5);
+    this.cardExpiryMinDate = new Date(2025, 3, 1);
   }
 
   async ngOnInit() {
@@ -75,20 +70,18 @@ export class BookingFormComponent implements OnInit {
     this.loading = false;
   }
 
-  // Format Credit Card Number (Add space every 4 digits)
   formatCardNumber() {
-    let value = this.payment.cardNumber.replace(/\D/g, ''); // Remove non-digits
-    value = value.substring(0, 16); // Limit to 16 digits
+    let value = this.payment.cardNumber.replace(/\D/g, '');
+    value = value.substring(0, 16);
     this.payment.cardNumber = value
-      .match(/.{1,4}/g) // Split into groups of 4
-      ?.join(' ') // Join with spaces
+      .match(/.{1,4}/g)
+      ?.join(' ')
       .trim() || value;
   }
 
-  // Format Expiry Date (Add slash, e.g., MM/YY)
   formatExpiryDate() {
-    let value = this.payment.expiryDate.replace(/\D/g, ''); // Remove non-digits
-    value = value.substring(0, 4); // Limit to 4 digits (MMYY)
+    let value = this.payment.expiryDate.replace(/\D/g, '');
+    value = value.substring(0, 4);
     if (value.length > 2) {
       this.payment.expiryDate = `${value.slice(0, 2)}/${value.slice(2)}`;
     } else {
@@ -96,7 +89,6 @@ export class BookingFormComponent implements OnInit {
     }
   }
 
-  // Calculate Total Price Based on Check-in, Check-out Dates, and Guests
   calculateTotalPrice(): number {
     if (!this.booking.check_in || !this.booking.check_out) {
       return 0;
@@ -109,15 +101,13 @@ export class BookingFormComponent implements OnInit {
     );
 
     let total = nights * this.hotel.price_per_night;
-    // Add $100 per night for 2 guests
     if (this.booking.guests === 2) {
-      total += nights * 100; // $100 per night for additional guest
+      total += nights * 100;
     }
 
     return total;
   }
 
-  // Submit Booking Form (Proceed to Payment)
   async onSubmit() {
     if (!this.user) {
       Swal.fire({
@@ -145,7 +135,6 @@ export class BookingFormComponent implements OnInit {
 
     this.loading = true;
 
-    // Save Initial Booking with "pending" Status
     const { data, error } = await this.supabaseService.client
       .from('bookings')
       .insert({
@@ -170,7 +159,6 @@ export class BookingFormComponent implements OnInit {
       return;
     }
 
-    // Store the booking ID to update the status later
     this.booking.id = data.id;
     this.showPaymentSection = true;
     this.loading = false;
@@ -182,13 +170,11 @@ export class BookingFormComponent implements OnInit {
       confirmButtonText: 'OK',
     });
 
-    // Scroll to Payment Section
     setTimeout(() => {
       document.querySelector('.payment-section')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   }
 
-  // Submit Payment Form (Mock Payment Processing)
   async onSubmitPayment() {
     if (
       !this.payment.cardNumber ||
@@ -205,7 +191,6 @@ export class BookingFormComponent implements OnInit {
       return;
     }
 
-    // Validate Card Number (16 digits)
     const cardNumberDigits = this.payment.cardNumber.replace(/\s/g, '');
     if (cardNumberDigits.length !== 16) {
       Swal.fire({
@@ -217,7 +202,6 @@ export class BookingFormComponent implements OnInit {
       return;
     }
 
-    // Validate Expiry Date (MM/YY format, not before current month)
     const [month, year] = this.payment.expiryDate.split('/');
     const expiryDate = new Date(2000 + parseInt(year), parseInt(month) - 1);
     if (isNaN(expiryDate.getTime()) || expiryDate < this.cardExpiryMinDate) {
@@ -230,7 +214,6 @@ export class BookingFormComponent implements OnInit {
       return;
     }
 
-    // Validate CVV (3-4 digits)
     if (!/^\d{3,4}$/.test(this.payment.cvv)) {
       Swal.fire({
         icon: 'error',
@@ -241,10 +224,8 @@ export class BookingFormComponent implements OnInit {
       return;
     }
 
-    // Mock Payment Processing
     this.loading = true;
     setTimeout(async () => {
-      // Update Booking Status to "confirmed"
       const { error } = await this.supabaseService.client
         .from('bookings')
         .update({
@@ -273,6 +254,6 @@ export class BookingFormComponent implements OnInit {
         });
       }
       this.loading = false;
-    }, 2000); // Simulate a 2-second payment processing delay
+    }, 2000);
   }
 }
