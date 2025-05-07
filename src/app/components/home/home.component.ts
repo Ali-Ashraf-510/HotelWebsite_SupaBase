@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SupabaseService } from '../services/supabase.service';
+import { SupabaseService } from '../../services/supabase.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
