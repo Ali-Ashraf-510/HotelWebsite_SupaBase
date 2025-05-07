@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-booking-form',
@@ -119,13 +120,26 @@ export class BookingFormComponent implements OnInit {
   // Submit Booking Form (Proceed to Payment)
   async onSubmit() {
     if (!this.user) {
-      alert('Please log in to book your stay.');
-      this.router.navigate(['/auth']);
+      Swal.fire({
+        icon: 'warning',
+        title: 'Login Required',
+        text: 'Please log in to book your stay.',
+        confirmButtonText: 'Go to Login',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/auth']);
+        }
+      });
       return;
     }
 
     if (!this.booking.check_in || !this.booking.check_out || !this.booking.guests) {
-      alert('Please fill in all required fields.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Incomplete Form',
+        text: 'Please fill in all required fields.',
+        confirmButtonText: 'OK',
+      });
       return;
     }
 
@@ -146,7 +160,12 @@ export class BookingFormComponent implements OnInit {
       .single();
 
     if (error) {
-      alert('Error creating booking: ' + error.message);
+      Swal.fire({
+        icon: 'error',
+        title: 'Booking Error',
+        text: 'Error creating booking: ' + error.message,
+        confirmButtonText: 'OK',
+      });
       this.loading = false;
       return;
     }
@@ -155,6 +174,13 @@ export class BookingFormComponent implements OnInit {
     this.booking.id = data.id;
     this.showPaymentSection = true;
     this.loading = false;
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Booking Submitted',
+      text: 'Proceed to payment.',
+      confirmButtonText: 'OK',
+    });
 
     // Scroll to Payment Section
     setTimeout(() => {
@@ -170,14 +196,24 @@ export class BookingFormComponent implements OnInit {
       !this.payment.cvv ||
       !this.payment.cardholderName
     ) {
-      alert('Please fill in all credit card details.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Incomplete Payment Details',
+        text: 'Please fill in all credit card details.',
+        confirmButtonText: 'OK',
+      });
       return;
     }
 
     // Validate Card Number (16 digits)
     const cardNumberDigits = this.payment.cardNumber.replace(/\s/g, '');
     if (cardNumberDigits.length !== 16) {
-      alert('Card number must be 16 digits.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid Card Number',
+        text: 'Card number must be 16 digits.',
+        confirmButtonText: 'OK',
+      });
       return;
     }
 
@@ -185,13 +221,23 @@ export class BookingFormComponent implements OnInit {
     const [month, year] = this.payment.expiryDate.split('/');
     const expiryDate = new Date(2000 + parseInt(year), parseInt(month) - 1);
     if (isNaN(expiryDate.getTime()) || expiryDate < this.cardExpiryMinDate) {
-      alert('Invalid or expired card date. Expiry must be April 2025 or later.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid Expiry Date',
+        text: 'Invalid or expired card date. Expiry must be April 2025 or later.',
+        confirmButtonText: 'OK',
+      });
       return;
     }
 
     // Validate CVV (3-4 digits)
     if (!/^\d{3,4}$/.test(this.payment.cvv)) {
-      alert('CVV must be 3 or 4 digits.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid CVV',
+        text: 'CVV must be 3 or 4 digits.',
+        confirmButtonText: 'OK',
+      });
       return;
     }
 
@@ -208,10 +254,23 @@ export class BookingFormComponent implements OnInit {
 
       if (error) {
         console.error('Error updating booking status:', error);
-        alert('There was an error processing your payment. Please try again.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Payment Error',
+          text: 'There was an error processing your payment. Please try again.',
+          confirmButtonText: 'OK',
+        });
       } else {
-        alert('Booking confirmed! Thank you for your reservation. View your bookings now!');
-        this.router.navigate(['/my-bookings']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Booking Confirmed',
+          text: 'Thank you for your reservation. View your bookings now!',
+          confirmButtonText: 'View Bookings',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/my-bookings']);
+          }
+        });
       }
       this.loading = false;
     }, 2000); // Simulate a 2-second payment processing delay

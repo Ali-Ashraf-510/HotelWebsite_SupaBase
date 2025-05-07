@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { SupabaseService } from '../services/supabase.service';
+import { SupabaseService } from '../../services/supabase.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
