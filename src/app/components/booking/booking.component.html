@@ -1,0 +1,43 @@
+<div class="booking-container">
+  <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
+
+  <div *ngIf="hotel && selectedRoom && !loading" class="booking-content">
+    <h2>Book Your Stay at {{ hotel.name }}</h2>
+    
+    <div class="room-info">
+      <h3>{{ selectedRoom.room_type }}</h3>
+      <p class="price">Price per night: {{ selectedRoom.price_per_night | currency }}</p>
+      <p class="max-occupancy">Maximum occupancy: {{ selectedRoom.max_occupancy }} guests</p>
+    </div>
+
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Check-in Date</mat-label>
+        <input matInput [matDatepicker]="checkInPicker" formControlName="check_in" (change)="calculateTotalPrice()">
+        <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
+        <mat-datepicker #checkInPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Check-out Date</mat-label>
+        <input matInput [matDatepicker]="checkOutPicker" formControlName="check_out" (change)="calculateTotalPrice()">
+        <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
+        <mat-datepicker #checkOutPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Number of Guests</mat-label>
+        <input matInput type="number" formControlName="guests" min="1" [max]="selectedRoom.max_occupancy">
+      </mat-form-field>
+
+      <div class="total-price" *ngIf="totalPrice > 0">
+        <h3>Total Price: {{ totalPrice | currency }}</h3>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="!bookingForm.valid || loading">
+        <mat-icon>book</mat-icon>
+        Confirm Booking
+      </button>
+    </form>
+  </div>
+</div> 

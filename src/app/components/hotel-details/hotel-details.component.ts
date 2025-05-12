@@ -16,9 +16,19 @@ interface Hotel {
   id: string;
   name: string;
   location: string;
-  price_per_night: number;
   description: string;
   image_url: string;
+}
+
+interface Room {
+  id: string;
+  hotel_id: string;
+  room_type: string;
+  price_per_night: number;
+  max_occupancy: number;
+  description: string;
+  image_url: string;
+  is_available: boolean;
 }
 
 interface Review {
@@ -56,11 +66,13 @@ interface User {
 })
 export class HotelDetailsComponent implements OnInit {
   hotel: Hotel | null = null;
+  rooms: Room[] = [];
   reviews: Review[] = [];
   user: User | null = null;
   newReview = { rating: 1, comment: '' };
   loading: boolean = false;
   reviewLoading: boolean = false;
+  selectedRoom: Room | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -87,6 +99,14 @@ export class HotelDetailsComponent implements OnInit {
       if (hotelError) throw new Error(`Error loading hotel: ${hotelError.message}`);
       this.hotel = hotelData;
 
+      // Load rooms
+      const { data: roomsData, error: roomsError } = await this.supabaseService.client
+        .from('rooms')
+        .select('*')
+        .eq('hotel_id', hotelId);
+      if (roomsError) throw new Error(`Error loading rooms: ${roomsError.message}`);
+      this.rooms = roomsData || [];
+
       // Load reviews
       const { data: reviewsData, error: reviewsError } = await this.supabaseService.client
         .from('reviews')
@@ -111,6 +131,10 @@ export class HotelDetailsComponent implements OnInit {
     } finally {
       this.loading = false;
     }
+  }
+
+  selectRoom(room: Room) {
+    this.selectedRoom = room;
   }
 
   async onSubmitReview() {

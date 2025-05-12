@@ -11,13 +11,34 @@
       </mat-card-header>
 
       <mat-card-content>
-        <p class="hotel-price">Price per Night: {{ hotel.price_per_night | currency }}</p>
+        <div class="rooms-section">
+          <h3 class="section-title">Available Rooms</h3>
+          <div *ngFor="let room of rooms" class="room-card" [class.selected]="room === selectedRoom" (click)="selectRoom(room)">
+            <div class="room-header">
+              <span class="room-type">{{ room.room_type }}</span>
+              <span class="room-price">{{ room.price_per_night | currency }}</span>
+            </div>
+            <div class="room-details">
+              <span class="room-detail">
+                <i class="fas fa-users"></i> Max Occupancy: {{ room.max_occupancy }}
+              </span>
+              <span class="room-detail" [class.room-available]="room.is_available" [class.room-unavailable]="!room.is_available">
+                {{ room.is_available ? 'Available' : 'Not Available' }}
+              </span>
+            </div>
+            <p class="room-description">{{ room.description }}</p>
+          </div>
+        </div>
         <p>{{ hotel.description }}</p>
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-raised-button color="accent" [routerLink]="['/booking', hotel.id]">
-          <mat-icon>book</mat-icon> Book Now
+        <button mat-raised-button color="accent" 
+                [routerLink]="['/booking', hotel.id]" 
+                [queryParams]="{ roomId: selectedRoom?.id }"
+                [disabled]="!selectedRoom">
+          <mat-icon>book</mat-icon> 
+          Book Now {{ selectedRoom ? 'for ' + (selectedRoom.price_per_night | currency) : '' }}
         </button>
       </mat-card-actions>
     </mat-card>

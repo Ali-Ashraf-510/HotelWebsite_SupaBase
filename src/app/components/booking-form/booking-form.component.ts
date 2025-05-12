@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,12 +24,14 @@ import Swal from 'sweetalert2';
     MatProgressSpinnerModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatIconModule,
   ],
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css'],
 })
 export class BookingFormComponent implements OnInit {
   hotel: any;
+  selectedRoom: any;
   user: any;
   booking = { id: null, check_in: null, check_out: null, guests: 1 };
   payment = {
@@ -58,16 +61,47 @@ export class BookingFormComponent implements OnInit {
   async ngOnInit() {
     this.loading = true;
     const hotelId = this.route.snapshot.paramMap.get('id');
-    const { data: hotelData } = await this.supabaseService.client
-      .from('hotels')
-      .select('*')
-      .eq('id', hotelId)
-      .single();
-    this.hotel = hotelData;
+    const roomId = this.route.snapshot.queryParamMap.get('roomId');
+
+    if (hotelId && roomId) {
+      await this.loadHotelAndRoom(hotelId, roomId);
+    }
 
     const { data: userData } = await this.supabaseService.getCurrentUser();
     this.user = userData?.user;
     this.loading = false;
+  }
+
+  async loadHotelAndRoom(hotelId: string, roomId: string) {
+    try {
+      // Load hotel
+      const { data: hotelData, error: hotelError } = await this.supabaseService.client
+        .from('hotels')
+        .select('*')
+        .eq('id', hotelId)
+        .single();
+      
+      if (hotelError) throw hotelError;
+      this.hotel = hotelData;
+
+      // Load room
+      const { data: roomData, error: roomError } = await this.supabaseService.client
+        .from('rooms')
+        .select('*')
+        .eq('id', roomId)
+        .single();
+      
+      if (roomError) throw roomError;
+      this.selectedRoom = roomData;
+    } catch (error) {
+      console.error('Error loading data:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error Loading Data',
+        text: 'Could not load hotel or room information.',
+        confirmButtonText: 'OK',
+      });
+    }
   }
 
   formatCardNumber() {
@@ -90,7 +124,7 @@ export class BookingFormComponent implements OnInit {
   }
 
   calculateTotalPrice(): number {
-    if (!this.booking.check_in || !this.booking.check_out) {
+    if (!this.booking.check_in || !this.booking.check_out || !this.selectedRoom) {
       return 0;
     }
 
@@ -100,9 +134,9 @@ export class BookingFormComponent implements OnInit {
       (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)
     );
 
-    let total = nights * this.hotel.price_per_night;
-    if (this.booking.guests === 2) {
-      total += nights * 100;
+    let total = nights * this.selectedRoom.price_per_night;
+    if (this.booking.guests > this.selectedRoom.max_occupancy) {
+      total += nights * 100 * (this.booking.guests - this.selectedRoom.max_occupancy);
     }
 
     return total;
@@ -123,7 +157,7 @@ export class BookingFormComponent implements OnInit {
       return;
     }
 
-    if (!this.booking.check_in || !this.booking.check_out || !this.booking.guests) {
+    if (!this.booking.check_in || !this.booking.check_out || !this.booking.guests || !this.selectedRoom) {
       Swal.fire({
         icon: 'error',
         title: 'Incomplete Form',
@@ -139,11 +173,12 @@ export class BookingFormComponent implements OnInit {
       .from('bookings')
       .insert({
         user_id: this.user.id,
-        hotel_id: this.hotel.id,
+        room_id: this.selectedRoom.id,
         check_in: this.booking.check_in,
         check_out: this.booking.check_out,
         total_price: this.calculateTotalPrice(),
         status: 'pending',
+        payment_status: 'pending'
       })
       .select()
       .single();
@@ -230,6 +265,7 @@ export class BookingFormComponent implements OnInit {
         .from('bookings')
         .update({
           status: 'confirmed',
+          payment_status: 'paid'
         })
         .eq('id', this.booking.id);
 

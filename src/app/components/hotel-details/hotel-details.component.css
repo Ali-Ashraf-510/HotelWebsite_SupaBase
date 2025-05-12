@@ -51,38 +51,90 @@ mat-card-content {
   padding: 0 1.5rem 1.5rem;
 }
 
-.hotel-price {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #3B82F6;
+/* Rooms Section */
+.rooms-section {
+  margin-top: 2rem;
+}
+
+.room-card {
+  background: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.room-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.room-card.selected {
+  border-color: #3B82F6;
+  background-color: #F0F7FF;
+}
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
 }
 
-mat-card-content p {
-  color: #6B7280;
-  line-height: 1.6;
-}
-
-mat-card-actions {
-  padding: 0 1.5rem 1.5rem;
-}
-
-mat-card-actions button {
-  padding: 0.75rem 1.5rem;
+.room-type {
+  font-size: 1.25rem;
   font-weight: 600;
-  border-radius: 8px;
+  color: #1F2A44;
+}
+
+.room-price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #3B82F6;
+}
+
+.room-details {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.room-detail {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
+  color: #6B7280;
 }
 
-mat-card-actions button[color="accent"] {
-  background-color: #10B981;
-  color: #FFFFFF;
+.room-detail i {
+  color: #3B82F6;
 }
 
-mat-card-actions button[color="accent"]:hover {
-  background-color: #059669;
+.room-description {
+  color: #6B7280;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.room-availability {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.room-available {
+  background-color: #D1FAE5;
+  color: #059669;
+}
+
+.room-unavailable {
+  background-color: #FEE2E2;
+  color: #DC2626;
 }
 
 /* Reviews Section */
@@ -224,6 +276,21 @@ mat-card-actions button[color="accent"]:hover {
     font-size: 1.5rem;
   }
 
+  .room-card {
+    padding: 1rem;
+  }
+
+  .room-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .room-details {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .review-item {
     flex-direction: column;
     align-items: flex-start;
@@ -240,7 +307,11 @@ mat-card-actions button[color="accent"]:hover {
     font-size: 1.25rem;
   }
 
-  .hotel-price {
+  .room-type {
+    font-size: 1.1rem;
+  }
+
+  .room-price {
     font-size: 1.1rem;
   }
 

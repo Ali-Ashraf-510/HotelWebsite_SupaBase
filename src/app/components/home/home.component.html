@@ -20,7 +20,12 @@
         <div class="hotel-content">
           <h3 class="hotel-title">{{ hotel.name }}</h3>
           <p class="hotel-location">{{ hotel.location }}</p>
-          <p class="hotel-price">Price per Night: {{ hotel.price_per_night | currency }}</p>
+          <div class="room-types">
+            <div *ngFor="let room of hotel.rooms" class="room-type-item">
+              <span class="room-type-name">{{ room.room_type }}</span>
+              <span class="room-price">{{ room.price_per_night | currency }}</span>
+            </div>
+          </div>
           <div class="hotel-rating">
             <span class="rating-value">{{ hotel.rating }}/5</span>
             <span class="rating-stars">
@@ -28,11 +33,10 @@
             </span>
           </div>
           <div class="hotel-actions">
-            <button class="btn btn-primary"  [routerLink]="['/hotels', hotel.id]">View Details</button>
+            <button class="btn btn-primary" [routerLink]="['/hotels', hotel.id]">View Details</button>
             <button class="btn btn-accent" [routerLink]="['/booking', hotel.id]" [class.disabled]="loading" [disabled]="loading">
               Book Now
             </button>
-            
           </div>
         </div>
       </div>

@@ -1,54 +1,81 @@
-<div class="container my-bookings-container">
-  <!-- Loading Spinner -->
+<div class="bookings-container">
+  <h2 class="page-title">My Bookings</h2>
+
   <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
 
-  <!-- Bookings Section -->
-  <div *ngIf="!loading && user" class="bookings-section">
-    <h3 class="section-title">My Bookings</h3>
+  <div *ngIf="!loading && bookings.length === 0" class="no-bookings">
+    <mat-icon>event_busy</mat-icon>
+    <p>No bookings found</p>
+    <button mat-raised-button color="primary" routerLink="/hotels">
+      <mat-icon>search</mat-icon>
+      Book Now
+    </button>
+  </div>
 
-    <!-- No Bookings Message -->
-    <p *ngIf="bookings.length === 0" class="no-bookings">
-      You have no bookings yet. <a routerLink="/hotels" class="book-now-link">Book now!</a>
-    </p>
-
-    <!-- Bookings List -->
-    <div class="bookings-grid">
-      <mat-card *ngFor="let booking of bookings" class="booking-card">
-        <div class="booking-image" *ngIf="booking.hotels.image_url">
-          <img [src]="booking.hotels.image_url" [alt]="booking.hotels.name" />
+  <div *ngIf="!loading && bookings.length > 0" class="bookings-grid">
+    <mat-card *ngFor="let booking of bookings" class="booking-card">
+      <div class="card-image">
+        <img [src]="booking.rooms.hotels.image_url" [alt]="booking.rooms.hotels.name">
+        <div class="status-overlay">
+          <mat-chip [color]="getStatusColor(booking.status)" selected>
+            {{ booking.status === 'confirmed' ? 'Confirmed' : 
+               booking.status === 'pending' ? 'Pending' : 'Cancelled' }}
+          </mat-chip>
         </div>
-        <mat-card-header>
-          <mat-card-title>{{ booking.hotels.name }}</mat-card-title>
-          <mat-card-subtitle>{{ booking.hotels.location }}</mat-card-subtitle>
-        </mat-card-header>
+      </div>
+      
+      <mat-card-header>
+        <mat-card-title>{{ booking.rooms.hotels.name }}</mat-card-title>
+        <mat-card-subtitle>
+          <mat-icon class="location-icon">location_on</mat-icon>
+          {{ booking.rooms.hotels.location }}
+        </mat-card-subtitle>
+      </mat-card-header>
 
-        <mat-card-content>
-          <p><strong>Check-in:</strong> {{ booking.check_in | date: 'mediumDate' }}</p>
-          <p><strong>Check-out:</strong> {{ booking.check_out | date: 'mediumDate' }}</p>
-          <p><strong>Total Price:</strong> {{ booking.total_price | currency }}</p>
-          <p
-            [ngClass]="{
-              'status-confirmed': booking.status === 'confirmed',
-              'status-pending': booking.status === 'pending',
-              'status-cancelled': booking.status === 'cancelled'
-            }"
-          >
-            <strong>Status:</strong> {{ booking.status | titlecase }}
-          </p>
-        </mat-card-content>
+      <mat-card-content>
+        <div class="booking-details">
+          <div class="detail-row">
+            <span class="label">Room Type:</span>
+            <span class="value">{{ booking.rooms.room_type }}</span>
+          </div>
 
-        <mat-card-actions>
-          <button mat-raised-button color="accent" (click)="bookAnother()">Book Another Stay</button>
-          <button
-            mat-raised-button
-            color="warn"
-            (click)="cancelBooking(booking.id)"
-            [disabled]="booking.status !== 'confirmed' && booking.status !== 'pending'"
-          >
-            Cancel Booking
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+          <div class="detail-row">
+            <span class="label">Check-in:</span>
+            <span class="value">{{ formatDate(booking.check_in) }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="label">Check-out:</span>
+            <span class="value">{{ formatDate(booking.check_out) }}</span>
+          </div>
+
+          <div class="detail-row total-price">
+            <span class="label">Total Price:</span>
+            <span class="value price">{{ booking.total_price | currency }}</span>
+          </div>
+
+          <div class="payment-status">
+            <mat-chip [color]="getPaymentStatusColor(booking.payment_status)" selected>
+              <mat-icon class="payment-icon">payment</mat-icon>
+              {{ booking.payment_status === 'paid' ? 'Paid' : 
+                 booking.payment_status === 'pending' ? 'Payment Pending' : 'Payment Failed' }}
+            </mat-chip>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="warn" 
+                *ngIf="booking.status !== 'cancelled'"
+                (click)="cancelBooking(booking.id)">
+          <mat-icon>cancel</mat-icon>
+          Cancel Booking
+        </button>
+        <button mat-button color="primary" [routerLink]="['/hotels', booking.rooms.hotels.id]">
+          <mat-icon>hotel</mat-icon>
+          View Hotel
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </div>

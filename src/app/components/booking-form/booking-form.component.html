@@ -2,8 +2,16 @@
   <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
 
   <!-- Booking Form -->
-  <div *ngIf="hotel && !loading" class="form-section">
+  <div *ngIf="hotel && selectedRoom && !loading" class="form-section">
     <h3 class="section-title">Book Your Stay at {{ hotel.name }}</h3>
+    
+    <div class="room-info">
+      <h4>{{ selectedRoom.room_type }}</h4>
+      <p class="price">Price per night: {{ selectedRoom.price_per_night | currency }}</p>
+      <p class="max-occupancy">Maximum occupancy: {{ selectedRoom.max_occupancy }} guests</p>
+      <p class="room-description">{{ selectedRoom.description }}</p>
+    </div>
+
     <form #bookingForm="ngForm" (ngSubmit)="onSubmit()" class="form">
       <!-- Check-in -->
       <mat-form-field appearance="outline">
@@ -48,7 +56,7 @@
           [(ngModel)]="booking.guests"
           name="guests"
           min="1"
-          max="2"
+          [max]="selectedRoom.max_occupancy"
           required
         />
         <mat-hint>Additional guest: +$100 per night</mat-hint>
@@ -68,6 +76,7 @@
         type="submit"
         [disabled]="bookingForm.invalid || loading"
       >
+        <mat-icon>book</mat-icon>
         Proceed to Payment
       </button>
     </form>
@@ -140,6 +149,7 @@
         type="submit"
         [disabled]="paymentForm.invalid || loading"
       >
+        <mat-icon>payment</mat-icon>
         Confirm Payment
       </button>
     </form>
