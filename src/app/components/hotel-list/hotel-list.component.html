@@ -1,25 +1,45 @@
-<div class="container hotels-container">
-    <h2 class="section-title">Explore Hotels</h2>
-    <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
-  
-    <div class="hotels-grid">
-      <mat-card *ngFor="let hotel of hotels" class="hotel-card">
-        <img mat-card-image [src]="hotel.image_url" alt="{{ hotel.name }}" class="hotel-image" />
-  
-        <mat-card-header>
-          <mat-card-title class="hotel-name">{{ hotel.name }}</mat-card-title>
-          <mat-card-subtitle class="hotel-location">{{ hotel.location }}</mat-card-subtitle>
-        </mat-card-header>
-  
-        <mat-card-content>
-          <p class="hotel-price">Price per Night: {{ hotel.price_per_night | currency }}</p>
-        </mat-card-content>
-  
-        <mat-card-actions>
-          <button mat-raised-button color="primary" [routerLink]="['/hotels', hotel.id]">View Details</button>
-          <button mat-raised-button color="accent" [routerLink]="['/booking', hotel.id]">Book Now</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+<div class="hotel-list-container">
+
+
+  <div *ngIf="error" class="error-message">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
   </div>
+
+  <div *ngIf="!loading && !error && hotels.length === 0" class="no-hotels">
+    <mat-icon>hotel</mat-icon>
+    <p>No hotels found</p>
+  </div>
+
+  <div *ngIf="!loading && !error && hotels.length > 0" class="hotels-grid">
+    <mat-card *ngFor="let hotel of hotels" class="hotel-card" [@cardAnimation]>
+      <div class="card-image">
+        <img [src]="hotel.image_url" [alt]="hotel.name">
+      </div>
+      
+      <mat-card-header>
+        <mat-card-title>{{ hotel.name }}</mat-card-title>
+        <mat-card-subtitle>
+          <mat-icon class="location-icon">location_on</mat-icon>
+          {{ hotel.location }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="hotel-details">
+          <div class="detail-row">
+
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" [routerLink]="['/hotels', hotel.id]">
+          <mat-icon>info</mat-icon>
+          View Details
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
   

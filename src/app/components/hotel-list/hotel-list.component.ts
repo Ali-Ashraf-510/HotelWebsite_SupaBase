@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { trigger, style, animate, transition } from '@angular/animations';
 
 interface Hotel {
@@ -24,6 +25,7 @@ interface Hotel {
     MatCardModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   templateUrl: './hotel-list.component.html',
   styleUrls: ['./hotel-list.component.css'],
@@ -38,7 +40,8 @@ interface Hotel {
 })
 export class HotelListComponent implements OnInit {
   hotels: Hotel[] = [];
-  loading: boolean = false;
+  loading: boolean = true;
+  error: string | null = null;
 
   constructor(private supabaseService: SupabaseService) {}
 
@@ -49,18 +52,28 @@ export class HotelListComponent implements OnInit {
   async fetchHotels() {
     try {
       this.loading = true;
+      this.error = null;
+      console.log('Fetching hotels...');
+      
       const { data, error } = await this.supabaseService.client
         .from('hotels')
-        .select('id, name, location, price_per_night, image_url');
+        .select('*');
       
       if (error) {
         console.error('Error fetching hotels:', error);
+        this.error = 'Failed to load hotels. Please try again later.';
         return;
       }
       
+      console.log('Hotels data:', data);
       this.hotels = data || [];
+      
+      if (this.hotels.length === 0) {
+        console.log('No hotels found in the database');
+      }
     } catch (err) {
       console.error('Unexpected error:', err);
+      this.error = 'An unexpected error occurred. Please try again later.';
     } finally {
       this.loading = false;
     }
