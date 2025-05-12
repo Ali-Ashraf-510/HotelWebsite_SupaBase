@@ -13,33 +13,76 @@
   <div class="featured-section">
     <h2 class="section-title">Featured Hotels</h2>
     <div class="hotel-grid">
-      <div *ngFor="let hotel of featuredHotels" class="hotel-card" >
-        <div class="hotel-image" *ngIf="hotel.image_url">
-          <img [src]="hotel.image_url" [alt]="hotel.name">
+      <mat-card *ngFor="let hotel of featuredHotels" class="hotel-card">
+        <div class="card-image-container">
+          <img [src]="hotel.image_url" 
+               [alt]="hotel.name" 
+               class="hotel-image"
+               decoding="async"
+               loading="eager">
+          <div class="image-overlay"></div>
+          <div class="price-tag">
+            <span class="currency">$</span>
+            <span class="amount">{{ hotel.price_per_night }}</span>
+            <span class="period">/night</span>
+          </div>
         </div>
-        <div class="hotel-content">
-          <h3 class="hotel-title">{{ hotel.name }}</h3>
-          <p class="hotel-location">{{ hotel.location }}</p>
-          <div class="room-types">
-            <div *ngFor="let room of hotel.rooms" class="room-type-item">
-              <span class="room-type-name">{{ room.room_type }}</span>
-              <span class="room-price">{{ room.price_per_night | currency }}</span>
+        
+        <mat-card-header>
+          <mat-card-title>{{ hotel.name }}</mat-card-title>
+          <mat-card-subtitle>
+            <div class="location">
+              <mat-icon class="location-icon">location_on</mat-icon>
+              {{ hotel.location }}
+            </div>
+            <div class="rating" *ngIf="hotel.rating">
+              <mat-icon *ngFor="let star of getStars(hotel.rating)" class="star-icon">star</mat-icon>
+              <span class="rating-count">({{ hotel.rating | number:'1.1-1' }})</span>
+            </div>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="hotel-description">{{ hotel.description }}</p>
+          
+          <div class="hotel-stats">
+            <div class="stat-item">
+              <mat-icon>hotel</mat-icon>
+              <span>{{ hotel.rooms?.length || 0 }} Rooms</span>
+            </div>
+            <div class="stat-item">
+              <mat-icon>attach_money</mat-icon>
+              <span>From ${{ hotel.price_per_night }}/night</span>
             </div>
           </div>
-          <div class="hotel-rating">
-            <span class="rating-value">{{ hotel.rating }}/5</span>
-            <span class="rating-stars">
-              <i *ngFor="let star of getStars(hotel.rating)" class="fas fa-star {{ star.class }}"></i>
-            </span>
+
+          <div class="amenities">
+            <div class="amenity-item">
+              <mat-icon>wifi</mat-icon>
+              <span>Free WiFi</span>
+            </div>
+            <div class="amenity-item">
+              <mat-icon>local_parking</mat-icon>
+              <span>Parking</span>
+            </div>
+            <div class="amenity-item">
+              <mat-icon>ac_unit</mat-icon>
+              <span>AC</span>
+            </div>
+            <div class="amenity-item">
+              <mat-icon>room_service</mat-icon>
+              <span>Room Service</span>
+            </div>
           </div>
-          <div class="hotel-actions">
-            <button class="btn btn-primary" [routerLink]="['/hotels', hotel.id]">View Details</button>
-            <button class="btn btn-accent" [routerLink]="['/booking', hotel.id]" [class.disabled]="loading" [disabled]="loading">
-              Book Now
-            </button>
-          </div>
-        </div>
-      </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button color="primary" [routerLink]="['/hotels', hotel.id]">
+            <mat-icon>visibility</mat-icon>
+            View Details
+          </button>
+        </mat-card-actions>
+      </mat-card>
     </div>
   </div>
 

@@ -116,9 +116,39 @@ export class SupabaseService {
    * الحصول على جميع الفنادق
    */
   async getHotels() {
-    return await this.supabase
-      .from('hotels')
-      .select('*');
+    try {
+      const { data, error } = await this.supabase
+        .from('hotels')
+        .select(`
+          *,
+          rooms (
+            count
+          ),
+          reviews (
+            rating
+          )
+        `)
+        .order('name');
+
+      if (error) {
+        console.error('Error fetching hotels:', error);
+        throw error;
+      }
+
+      // Calculate average rating for each hotel
+      const hotelsWithRating = data?.map(hotel => ({
+        ...hotel,
+        average_rating: hotel.reviews?.length 
+          ? hotel.reviews.reduce((acc: number, review: any) => acc + review.rating, 0) / hotel.reviews.length 
+          : 0,
+        rooms_count: hotel.rooms?.[0]?.count || 0
+      }));
+
+      return { data: hotelsWithRating, error: null };
+    } catch (error) {
+      console.error('Error in getHotels:', error);
+      return { data: null, error: 'Failed to fetch hotels' };
+    }
   }
 
   /**

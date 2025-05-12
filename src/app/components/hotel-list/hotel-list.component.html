@@ -1,41 +1,100 @@
 <div class="hotel-list-container">
+  <h2 class="section-title">Our Luxury Hotels</h2>
 
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" class="loading-progress"></mat-progress-bar>
 
   <div *ngIf="error" class="error-message">
     <mat-icon>error_outline</mat-icon>
     <p>{{ error }}</p>
   </div>
 
-  <div *ngIf="!loading && !error && hotels.length === 0" class="no-hotels">
+  <div *ngIf="!isLoading && !error && hotels.length === 0" class="no-hotels">
     <mat-icon>hotel</mat-icon>
     <p>No hotels found</p>
   </div>
 
-  <div *ngIf="!loading && !error && hotels.length > 0" class="hotels-grid">
-    <mat-card *ngFor="let hotel of hotels" class="hotel-card" [@cardAnimation]>
-      <div class="card-image">
-        <img [src]="hotel.image_url" [alt]="hotel.name">
+  <div *ngIf="!isLoading && !error && hotels.length > 0" class="hotels-grid">
+    <mat-card *ngFor="let hotel of hotels; trackBy: trackByHotelId" class="hotel-card">
+      <div class="card-image-container">
+        <img [src]="hotel.image_url" 
+             [alt]="hotel.name" 
+             class="hotel-image"
+             decoding="async"
+             loading="eager">
+        <div class="image-overlay"></div>
+        <div class="price-tag">
+          <span class="currency">$</span>
+          <span class="amount">{{ hotel.price_per_night }}</span>
+          <span class="period">/night</span>
+        </div>
       </div>
       
       <mat-card-header>
         <mat-card-title>{{ hotel.name }}</mat-card-title>
         <mat-card-subtitle>
-          <mat-icon class="location-icon">location_on</mat-icon>
-          {{ hotel.location }}
+          <div class="location">
+            <mat-icon class="location-icon">location_on</mat-icon>
+            {{ hotel.location }}
+          </div>
+          <div class="rating">
+            <mat-icon *ngFor="let star of getStarRating(hotel.average_rating)" class="star-icon">star</mat-icon>
+            <span class="rating-count">({{ hotel.average_rating | number:'1.1-1' }})</span>
+          </div>
         </mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
-        <div class="hotel-details">
-          <div class="detail-row">
+        <p class="hotel-description">{{ hotel.description }}</p>
+        
+        <div class="hotel-stats">
+          <div class="stat-item">
+            <mat-icon>hotel</mat-icon>
+            <span>{{ hotel.rooms_count }} Rooms</span>
+          </div>
+          <div class="stat-item">
+            <mat-icon>attach_money</mat-icon>
+            <span>From ${{ hotel.price_per_night }}/night</span>
+          </div>
+        </div>
 
+        <div class="amenities">
+          <div class="amenity-item">
+            <mat-icon>wifi</mat-icon>
+            <span>Free WiFi</span>
+          </div>
+          <div class="amenity-item">
+            <mat-icon>local_parking</mat-icon>
+            <span>Parking</span>
+          </div>
+          <div class="amenity-item">
+            <mat-icon>ac_unit</mat-icon>
+            <span>AC</span>
+          </div>
+          <div class="amenity-item">
+            <mat-icon>room_service</mat-icon>
+            <span>Room Service</span>
+          </div>
+        </div>
+
+        <div class="hotel-features">
+          <div class="feature">
+            <mat-icon>king_bed</mat-icon>
+            <span>Luxury Rooms</span>
+          </div>
+          <div class="feature">
+            <mat-icon>pool</mat-icon>
+            <span>Swimming Pool</span>
+          </div>
+          <div class="feature">
+            <mat-icon>restaurant</mat-icon>
+            <span>Restaurant</span>
           </div>
         </div>
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-button color="primary" [routerLink]="['/hotels', hotel.id]">
-          <mat-icon>info</mat-icon>
+        <button mat-raised-button color="primary" [routerLink]="['/hotels', hotel.id]">
+          <mat-icon>visibility</mat-icon>
           View Details
         </button>
       </mat-card-actions>

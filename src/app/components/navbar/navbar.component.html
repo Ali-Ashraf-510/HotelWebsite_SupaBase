@@ -1,4 +1,4 @@
-<mat-toolbar class="custom-navbar">
+<mat-toolbar class="custom-navbar" [class.scrolled]="isScrolled">
   <div class="navbar-container">
     <!-- Mobile menu toggle -->
     <button
@@ -12,21 +12,19 @@
     </button>
 
     <!-- Logo -->
-    <a class="logo" routerLink="/">
+    <a class="logo" routerLink="/" (click)="closeMenu()">
       <mat-icon class="logo-icon">hotel</mat-icon>
-      <span class="logo-text">Nomad<span>Hotels</span></span>
+      <span class="logo-text">Stay<span>Sphere</span></span>
     </a>
 
-    <!-- Spacer -->
-    <span class="spacer"></span>
-
     <!-- Navigation menu -->
-    <div class="menu" [class.open]="isMenuOpen">
+    <div class="menu" [class.open]="isMenuOpen" (click)="closeMenu()">
       <button
         mat-button
         class="nav-link"
         routerLink="/"
         routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
         aria-label="Home"
       >
         <mat-icon>home</mat-icon> Home
@@ -51,8 +49,6 @@
       >
         <mat-icon>info</mat-icon> About
       </button>
-
-      <!-- Removed Contact button -->
       
       <!-- Auth buttons or user menu -->
       <div class="auth-buttons">
@@ -67,7 +63,7 @@
           </button>
           <button
             mat-stroked-button
-            class="sign-in-btn"
+            class="sign-up-btn"
             routerLink="/signup"
             aria-label="Sign Up"
           >
@@ -77,10 +73,10 @@
 
         <ng-template #userLoggedIn>
           <!-- User avatar and name with dropdown -->
-          <div class="user-menu" (click)="toggleDropdown()" tabindex="0" (keydown.enter)="toggleDropdown()" aria-label="User menu">
-            <div class="user-info">
+          <div class="user-menu" (click)="$event.stopPropagation()" tabindex="0">
+            <div class="user-info" (click)="toggleDropdown()" (keydown.enter)="toggleDropdown()">
               <span class="user-name">{{ userName || 'User' }}</span>
-              <mat-icon class="user-icon">account_circle</mat-icon>
+              <mat-icon class="user-icon" [class.rotate]="isDropdownOpen">expand_more</mat-icon>
             </div>
             <div class="dropdown" [class.open]="isDropdownOpen">
               <button
@@ -90,7 +86,18 @@
                 routerLinkActive="active"
                 aria-label="My Bookings"
               >
-                <mat-icon>event_note</mat-icon> My Bookings
+                <mat-icon [matBadge]="bookingsCount" [matBadgeHidden]="!bookingsCount">event_note</mat-icon>
+                My Bookings
+              </button>
+              <button
+                mat-button
+                class="dropdown-item"
+                routerLink="/profile"
+                routerLinkActive="active"
+                aria-label="Profile Settings"
+              >
+                <mat-icon>settings</mat-icon>
+                Profile Settings
               </button>
               <button
                 mat-button

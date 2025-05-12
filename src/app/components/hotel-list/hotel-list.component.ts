@@ -4,16 +4,18 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
-import { trigger, style, animate, transition } from '@angular/animations';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 interface Hotel {
   id: number;
   name: string;
   location: string;
+  description: string;
   price_per_night: number;
   image_url: string;
+  average_rating: number;
+  rooms_count: number;
 }
 
 @Component({
@@ -24,59 +26,49 @@ interface Hotel {
     RouterLink,
     MatCardModule,
     MatButtonModule,
-    MatProgressSpinnerModule,
     MatIconModule,
+    MatProgressBarModule
   ],
   templateUrl: './hotel-list.component.html',
-  styleUrls: ['./hotel-list.component.css'],
-  animations: [
-    trigger('cardAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
-      ]),
-    ]),
-  ],
+  styleUrls: ['./hotel-list.component.css']
 })
 export class HotelListComponent implements OnInit {
   hotels: Hotel[] = [];
-  loading: boolean = true;
+  isLoading = true;
   error: string | null = null;
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private supabase: SupabaseService) {}
 
-  async ngOnInit() {
-    await this.fetchHotels();
+  ngOnInit() {
+    this.fetchHotels();
   }
 
-  async fetchHotels() {
+  private async fetchHotels() {
     try {
-      this.loading = true;
-      this.error = null;
-      console.log('Fetching hotels...');
-      
-      const { data, error } = await this.supabaseService.client
-        .from('hotels')
-        .select('*');
+      this.isLoading = true;
+      const { data, error } = await this.supabase.getHotels();
       
       if (error) {
-        console.error('Error fetching hotels:', error);
-        this.error = 'Failed to load hotels. Please try again later.';
-        return;
+        throw new Error(error);
       }
-      
-      console.log('Hotels data:', data);
-      this.hotels = data || [];
-      
-      if (this.hotels.length === 0) {
-        console.log('No hotels found in the database');
+
+      if (!data) {
+        throw new Error('No data received');
       }
-    } catch (err) {
-      console.error('Unexpected error:', err);
-      this.error = 'An unexpected error occurred. Please try again later.';
+
+      this.hotels = data;
+      console.log('Fetched hotels:', this.hotels);
+      
+    } catch (error) {
+      console.error('Error fetching hotels:', error);
+      this.error = 'Failed to load hotels. Please try again later.';
     } finally {
-      this.loading = false;
+      this.isLoading = false;
     }
+  }
+
+  getStarRating(rating: number): number[] {
+    return Array(Math.round(rating)).fill(0);
   }
 
   trackByHotelId(index: number, hotel: Hotel): number {
