@@ -5,16 +5,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SupabaseService } from '../../services/supabase.service';
+import { Hotel, HotelWithDetails } from '../../shared/types';
 
-interface Hotel {
-  id: number;
-  name: string;
-  location: string;
-  description: string;
-  price_per_night: number;
-  image_url: string;
+interface HotelWithRating extends HotelWithDetails {
   rating: number;
-  rooms: any[];
 }
 
 @Component({
@@ -31,7 +25,7 @@ interface Hotel {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  featuredHotels: Hotel[] = [];
+  featuredHotels: HotelWithRating[] = [];
   loading = false;
   error: string | null = null;
 
@@ -44,12 +38,19 @@ export class HomeComponent implements OnInit {
   private async loadFeaturedHotels() {
     try {
       this.loading = true;
-      const { data, error } = await this.supabase.getHotels();
+      const { data, error } = await this.supabase.getHotelsWithDetails();
       
       if (error) throw error;
       
-      // Get first 3 hotels as featured
-      this.featuredHotels = (data || []).slice(0, 3);
+      // Calculate ratings and get first 3 hotels as featured
+      const hotelsWithRating = (data || []).map(hotel => ({
+        ...hotel,
+        rating: hotel.reviews.length 
+          ? hotel.reviews.reduce((acc, review) => acc + review.rating, 0) / hotel.reviews.length 
+          : 0
+      })) as HotelWithRating[];
+      
+      this.featuredHotels = hotelsWithRating.slice(0, 3);
       
     } catch (error) {
       console.error('Error loading featured hotels:', error);

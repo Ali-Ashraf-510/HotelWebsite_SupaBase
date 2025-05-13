@@ -6,23 +6,18 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-
-interface Hotel {
-  id: number;
-  name: string;
-  location: string;
-  description: string;
-  price_per_night: number;
-  image_url: string;
-  average_rating: number;
-  rooms_count: number;
-}
+import { Hotel } from '../../shared/types';
 
 interface SearchParams {
   location: string;
   guests: number;
   checkIn: string | null;
   checkOut: string | null;
+}
+
+interface HotelWithDetails extends Hotel {
+  average_rating: number;
+  rooms_count: number;
 }
 
 @Component({
@@ -40,8 +35,8 @@ interface SearchParams {
   styleUrls: ['./hotel-list.component.css']
 })
 export class HotelListComponent implements OnInit {
-  hotels: Hotel[] = [];
-  filteredHotels: Hotel[] = [];
+  hotels: HotelWithDetails[] = [];
+  filteredHotels: HotelWithDetails[] = [];
   isLoading = true;
   error: string | null = null;
   searchParams: SearchParams = {
@@ -57,7 +52,6 @@ export class HotelListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Get search parameters from URL
     this.route.queryParams.subscribe(params => {
       this.searchParams = {
         location: params['location'] || '',
@@ -82,7 +76,7 @@ export class HotelListComponent implements OnInit {
         throw new Error('No data received');
       }
 
-      this.hotels = data;
+      this.hotels = data as HotelWithDetails[];
       this.filterHotels();
       
     } catch (error) {
@@ -95,7 +89,6 @@ export class HotelListComponent implements OnInit {
 
   private filterHotels() {
     this.filteredHotels = this.hotels.filter(hotel => {
-      // If location is specified, filter by location
       if (this.searchParams.location && 
           !hotel.location.toLowerCase().includes(this.searchParams.location.toLowerCase())) {
         return false;
@@ -108,7 +101,7 @@ export class HotelListComponent implements OnInit {
     return Array(Math.round(rating)).fill(0);
   }
 
-  trackByHotelId(index: number, hotel: Hotel): number {
+  trackByHotelId(index: number, hotel: HotelWithDetails): string {
     return hotel.id;
   }
 }

@@ -12,35 +12,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { User } from '@supabase/supabase-js';
+import { Hotel, Room, Review } from '../../shared/types';
 
-interface Hotel {
-  id: string;
-  name: string;
-  location: string;
-  description: string;
-  image_url: string;
-  price_per_night: number;
-  rating: number;
-}
-
-interface Room {
-  id: string;
-  hotel_id: string;
-  room_type: string;
-  price_per_night: number;
-  max_occupancy: number;
-  description: string;
-  image_url: string;
-  is_available: boolean;
-}
-
-interface Review {
-  id: string;
-  hotel_id: string;
-  user_id: string;
-  rating: number;
-  comment: string;
+interface ReviewWithUser extends Review {
   user_email: string;
+}
+
+interface HotelWithRating extends Hotel {
+  rating: number;
 }
 
 @Component({
@@ -63,9 +42,9 @@ interface Review {
   styleUrls: ['./hotel-details.component.css'],
 })
 export class HotelDetailsComponent implements OnInit {
-  hotel: Hotel | null = null;
+  hotel: HotelWithRating | null = null;
   rooms: Room[] = [];
-  reviews: Review[] = [];
+  reviews: ReviewWithUser[] = [];
   user: { id: string; email: string } | null = null;
   newReview = { rating: 1, comment: '' };
   loading: boolean = false;
@@ -80,7 +59,6 @@ export class HotelDetailsComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadData();
-    // Subscribe to user changes
     this.supabaseService.currentUser.subscribe(async (user) => {
       if (user) {
         this.user = { id: user.id, email: user.email || '' };
@@ -96,29 +74,34 @@ export class HotelDetailsComponent implements OnInit {
       const hotelId = this.route.snapshot.paramMap.get('id');
       if (!hotelId) throw new Error('Hotel ID not found');
 
-      // Load hotel details
       const { data: hotelData, error: hotelError } = await this.supabaseService.getHotelById(hotelId);
       if (hotelError) throw new Error(`Error loading hotel: ${hotelError}`);
       if (!hotelData) throw new Error('Hotel not found');
-      this.hotel = hotelData;
+      
+      // Calculate average rating
+      const { data: reviewsData } = await this.supabaseService.client
+        .from('reviews')
+        .select('rating')
+        .eq('hotel_id', hotelId);
+      
+      const averageRating = reviewsData?.length 
+        ? reviewsData.reduce((acc, review) => acc + review.rating, 0) / reviewsData.length 
+        : 0;
 
-      // Load rooms
+      this.hotel = { ...hotelData, rating: averageRating };
+
       const { data: roomsData, error: roomsError } = await this.supabaseService.getRoomsByHotelId(hotelId);
       if (roomsError) throw new Error(`Error loading rooms: ${roomsError}`);
       this.rooms = roomsData || [];
 
-      // Load reviews with user information
-      const { data: reviewsData, error: reviewsError } = await this.supabaseService.client
+      const { data: reviewsWithUsers, error: reviewsError } = await this.supabaseService.client
         .from('reviews')
         .select('*, users(email)')
         .eq('hotel_id', hotelId);
       if (reviewsError) throw new Error(`Error loading reviews: ${reviewsError.message}`);
-      this.reviews = reviewsData?.map(review => ({
-        id: review.id,
-        hotel_id: review.hotel_id,
-        user_id: review.user_id,
-        rating: review.rating,
-        comment: review.comment,
+      
+      this.reviews = reviewsWithUsers?.map(review => ({
+        ...review,
         user_email: review.users?.email || 'Anonymous',
       })) || [];
 
@@ -155,7 +138,6 @@ export class HotelDetailsComponent implements OnInit {
 
       if (error) throw new Error(`Error submitting review: ${error}`);
 
-      // Reset form and reload data
       this.newReview = { rating: 1, comment: '' };
       await this.loadData();
       this.snackBar.open('Review submitted successfully!', 'Close', { duration: 3000 });
