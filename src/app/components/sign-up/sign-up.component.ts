@@ -7,8 +7,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
+
+interface AuthResponse {
+  data: any;
+  error: {
+    message: string;
+  } | null;
+}
 
 @Component({
   selector: 'app-sign-up',
@@ -22,6 +31,8 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatIconModule,
+    MatCheckboxModule,
   ],
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css'],
@@ -36,12 +47,14 @@ import { CommonModule } from '@angular/common';
 })
 export class SignUpComponent {
   formData = {
-    name: '', // Added name field
+    name: '',
     email: '',
     password: '',
     confirmPassword: ''
   };
 
+  hidePassword: boolean = true;
+  hideConfirmPassword: boolean = true;
   loading: boolean = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
@@ -91,12 +104,11 @@ export class SignUpComponent {
     this.successMessage = null;
 
     try {
-      // Pass name along with email and password to SupabaseService
       const { error } = await this.supabaseService.signUp(
         this.formData.email,
         this.formData.password,
-        this.formData.name // Pass name as an additional parameter
-      ) as { error?: { message: string } };
+        this.formData.name
+      ) as AuthResponse;
 
       if (error) {
         this.errorMessage = error.message || 'An unexpected error occurred';

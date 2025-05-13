@@ -1,202 +1,252 @@
-/* Import Google Fonts for modern typography */
+/* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-/* Wrapper for background styling */
-.sign-up-wrapper {
+/* Auth Wrapper */
+.auth-wrapper {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #e0e7ff 0%, #bbdefb 100%);
   padding: 20px;
-}
-
-/* Container for centering the card */
-.sign-up-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 400px;
-}
-
-/* Card styling */
-.sign-up-card {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  width: 100%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.sign-up-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-}
-
-/* Card title */
-.card-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  text-align: center;
-  margin-bottom: 16px;
 }
 
-/* Form styling */
-.sign-up-form {
+/* Container */
+.auth-container {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+/* Card */
+.auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.auth-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Card Header */
+.card-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1a2b49;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+mat-card-subtitle {
+  color: #6b7c93;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Form */
+.auth-form {
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.5rem;
 }
 
-/* Form fields */
-.form-field .mat-form-field {
+/* Form Fields */
+.form-field {
   width: 100%;
-  font-family: 'Poppins', sans-serif;
 }
 
-.form-field .mat-form-field-label {
-  color: #333;
-  font-weight: 500;
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
 }
 
-.form-field .mat-form-field-outline {
-  transition: all 0.3s ease;
+::ng-deep .mat-form-field-prefix {
+  margin-right: 12px;
+  color: #4a6cf7;
 }
 
-.form-field .mat-form-field-outline-thick {
-  color: #007bff;
+/* Terms and Privacy */
+.terms-privacy {
+  margin-top: -0.5rem;
 }
 
-.form-field input {
-  color: #333;
-  caret-color: #007bff;
+.terms-privacy a {
+  color: #4a6cf7;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.form-field input:focus {
-  outline: none;
+.terms-privacy a:hover {
+  color: #2d3ff7;
+  text-decoration: underline;
 }
 
-.form-field.mat-focused .mat-form-field-outline {
-  border-color: #007bff;
-}
-
-.form-field .mat-error {
-  font-size: 12px;
-  color: #d32f2f;
-  font-family: 'Poppins', sans-serif;
-}
-
-/* Submit button */
+/* Submit Button */
 .submit-button {
-  background: #007bff;
-  color: #ffffff;
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
+  background: linear-gradient(45deg, #4a6cf7, #6e8cff);
+  color: white;
+  padding: 1rem;
+  font-size: 1rem;
   font-weight: 500;
-  padding: 12px;
-  border-radius: 8px;
-  transition: background 0.3s ease, transform 0.2s ease;
+  border-radius: 12px;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
-.submit-button:hover:not(:disabled) {
-  background: #0056b3;
-  transform: scale(1.02);
+.submit-button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(74, 108, 247, 0.3);
+}
+
+.submit-button mat-icon {
+  font-size: 1.2rem;
 }
 
 .submit-button:disabled {
-  background: #b0bec5;
+  background: #e2e8f0;
   cursor: not-allowed;
 }
 
-.submit-button .mat-spinner {
-  display: inline-block;
-  vertical-align: middle;
+/* Social Login */
+.social-login {
+  margin-top: 2rem;
 }
 
-/* Sign-in link */
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 60px);
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider span {
+  background: white;
+  padding: 0 1rem;
+  color: #6b7c93;
+  font-size: 0.9rem;
+}
+
+.social-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-buttons button {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.google-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.facebook-btn mat-icon {
+  color: #1877f2;
+}
+
+.social-buttons button:hover {
+  background: #f8fafc;
+  transform: translateY(-2px);
+}
+
+/* Sign In Link */
 .sign-in-link {
   text-align: center;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  color: #333;
-  margin-top: 16px;
+  margin-top: 2rem;
+  color: #6b7c93;
+  font-size: 0.95rem;
 }
 
 .sign-in-link .link {
-  color: #007bff;
+  color: #4a6cf7;
   text-decoration: none;
   font-weight: 500;
+  margin-left: 0.5rem;
   transition: color 0.3s ease;
 }
 
 .sign-in-link .link:hover {
-  color: #0056b3;
+  color: #2d3ff7;
   text-decoration: underline;
 }
 
-/* Error and success messages */
+/* Messages */
+.error-message,
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
 .error-message {
-  color: #d32f2f;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  text-align: center;
-  margin-top: 16px;
-  padding: 8px;
-  background: rgba(211, 47, 47, 0.1);
-  border-radius: 6px;
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .success-message {
-  color: #2e7d32;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  text-align: center;
-  margin-top: 16px;
-  padding: 8px;
-  background: rgba(46, 125, 50, 0.1);
-  border-radius: 6px;
+  background: #dcfce7;
+  color: #16a34a;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-  .sign-up-container {
-    padding: 16px;
-  }
+.error-message mat-icon,
+.success-message mat-icon {
+  font-size: 1.2rem;
+}
 
-  .sign-up-card {
-    padding: 16px;
+/* Responsive Design */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.5rem;
   }
 
   .card-title {
-    font-size: 20px;
+    font-size: 1.75rem;
   }
 
-  .submit-button {
-    font-size: 14px;
-    padding: 10px;
+  .social-buttons {
+    flex-direction: column;
   }
-}
 
-/* Animation for fadeIn */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+  .terms-privacy {
+    text-align: left;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.sign-up-card {
-  animation: fadeIn 0.5s ease-out;
 }

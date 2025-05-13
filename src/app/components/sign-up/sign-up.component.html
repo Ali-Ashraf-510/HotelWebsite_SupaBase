@@ -1,45 +1,92 @@
-<div class="sign-up-wrapper">
-  <div class="sign-up-container">
-    <mat-card class="sign-up-card" @fadeIn>
+<div class="auth-wrapper">
+  <div class="auth-container">
+    <mat-card class="auth-card" @fadeIn>
       <mat-card-header>
-        <mat-card-title class="card-title">Create Your Account</mat-card-title>
+        <mat-card-title class="card-title">Create Account</mat-card-title>
+        <mat-card-subtitle>Join our community of travelers</mat-card-subtitle>
       </mat-card-header>
+
       <mat-card-content>
-        <form (ngSubmit)="onSubmit()" class="sign-up-form">
+        <form (ngSubmit)="onSubmit()" class="auth-form">
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Name</mat-label>
+            <mat-label>Full Name</mat-label>
             <input matInput type="text" [(ngModel)]="formData.name" name="name" required [disabled]="loading">
+            <mat-icon matPrefix>person</mat-icon>
             <mat-error *ngIf="formErrors['name']">{{ formErrors['name'] }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Email</mat-label>
             <input matInput type="email" [(ngModel)]="formData.email" name="email" required [disabled]="loading">
+            <mat-icon matPrefix>email</mat-icon>
             <mat-error *ngIf="formErrors['email']">{{ formErrors['email'] }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Password</mat-label>
-            <input matInput type="password" [(ngModel)]="formData.password" name="password" required [disabled]="loading">
+            <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="formData.password" name="password" required [disabled]="loading">
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
             <mat-error *ngIf="formErrors['password']">{{ formErrors['password'] }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" [(ngModel)]="formData.confirmPassword" name="confirmPassword" required [disabled]="loading">
+            <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" [(ngModel)]="formData.confirmPassword" name="confirmPassword" required [disabled]="loading">
+            <mat-icon matPrefix>lock_clock</mat-icon>
+            <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button">
+              <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
             <mat-error *ngIf="formErrors['confirmPassword']">{{ formErrors['confirmPassword'] }}</mat-error>
           </mat-form-field>
 
+          <div class="terms-privacy">
+            <mat-checkbox color="primary" required>
+              I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+            </mat-checkbox>
+          </div>
+
           <button mat-raised-button color="primary" type="submit" class="submit-button" [disabled]="loading">
             <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-            <span *ngIf="!loading">Sign Up</span>
+            <span *ngIf="!loading">
+              <mat-icon>person_add</mat-icon>
+              Create Account
+            </span>
           </button>
 
-          <p class="sign-in-link">Already have an account? <a routerLink="/auth" class="link">Sign In</a></p>
+          <div class="social-login">
+            <div class="divider">
+              <span>Or sign up with</span>
+            </div>
+            <div class="social-buttons">
+              <button mat-stroked-button type="button" class="google-btn">
+                <img src="assets/google-icon.png" alt="Google">
+                Google
+              </button>
+              <button mat-stroked-button type="button" class="facebook-btn">
+                <mat-icon>facebook</mat-icon>
+                Facebook
+              </button>
+            </div>
+          </div>
+
+          <p class="sign-in-link">
+            Already have an account? 
+            <a routerLink="/auth" class="link">Sign In</a>
+          </p>
         </form>
 
-        <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-        <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+        <div *ngIf="errorMessage" class="error-message" @fadeIn>
+          <mat-icon>error_outline</mat-icon>
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="successMessage" class="success-message" @fadeIn>
+          <mat-icon>check_circle</mat-icon>
+          {{ successMessage }}
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

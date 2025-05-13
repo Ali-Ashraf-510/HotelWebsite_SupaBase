@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../../services/supabase.service';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,13 @@ interface Hotel {
   image_url: string;
   average_rating: number;
   rooms_count: number;
+}
+
+interface SearchParams {
+  location: string;
+  guests: number;
+  checkIn: string | null;
+  checkOut: string | null;
 }
 
 @Component({
@@ -34,13 +41,32 @@ interface Hotel {
 })
 export class HotelListComponent implements OnInit {
   hotels: Hotel[] = [];
+  filteredHotels: Hotel[] = [];
   isLoading = true;
   error: string | null = null;
+  searchParams: SearchParams = {
+    location: '',
+    guests: 1,
+    checkIn: null,
+    checkOut: null
+  };
 
-  constructor(private supabase: SupabaseService) {}
+  constructor(
+    private supabase: SupabaseService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.fetchHotels();
+    // Get search parameters from URL
+    this.route.queryParams.subscribe(params => {
+      this.searchParams = {
+        location: params['location'] || '',
+        guests: params['guests'] ? parseInt(params['guests']) : 1,
+        checkIn: params['checkIn'] || null,
+        checkOut: params['checkOut'] || null
+      };
+      this.fetchHotels();
+    });
   }
 
   private async fetchHotels() {
@@ -57,7 +83,7 @@ export class HotelListComponent implements OnInit {
       }
 
       this.hotels = data;
-      console.log('Fetched hotels:', this.hotels);
+      this.filterHotels();
       
     } catch (error) {
       console.error('Error fetching hotels:', error);
@@ -65,6 +91,17 @@ export class HotelListComponent implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  private filterHotels() {
+    this.filteredHotels = this.hotels.filter(hotel => {
+      // If location is specified, filter by location
+      if (this.searchParams.location && 
+          !hotel.location.toLowerCase().includes(this.searchParams.location.toLowerCase())) {
+        return false;
+      }
+      return true;
+    });
   }
 
   getStarRating(rating: number): number[] {

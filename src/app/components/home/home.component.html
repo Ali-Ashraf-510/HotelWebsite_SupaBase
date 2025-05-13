@@ -1,11 +1,47 @@
 <div class="home-container">
   <!-- Hero Section -->
   <div class="hero-section">
+    <div class="hero-overlay"></div>
     <div class="hero-content">
-      <h1 class="hero-title">Find Your Perfect Hotel</h1>
-      <p class="hero-subtitle">Book the best hotels for your next getaway with ease.</p>
-      <!-- Search Bar -->
-   
+      <h1 class="hero-title animate__animated animate__fadeInDown">
+        Discover Your Perfect Stay
+        <span class="highlight">Anywhere</span>
+      </h1>
+      <p class="hero-subtitle animate__animated animate__fadeIn animate__delay-1s">
+        Book luxurious hotels at the best prices. Your comfort is our priority.
+      </p>
+      
+      <!-- Quick Stats -->
+      <div class="quick-stats animate__animated animate__fadeIn animate__delay-2s">
+        <div class="stat-item">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Hotels</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">100K+</span>
+          <span class="stat-label">Happy Guests</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <span class="stat-label">Cities</span>
+        </div>
+      </div>
+
+      <!-- Call to Action Button -->
+      <div class="cta-button animate__animated animate__fadeInUp animate__delay-1s">
+        <button mat-raised-button color="primary" routerLink="/hotels">
+          <mat-icon>search</mat-icon>
+          Browse All Hotels
+        </button>
+      </div>
+    </div>
+
+    <!-- Scroll Down Indicator -->
+    <div class="scroll-down animate__animated animate__fadeIn animate__delay-2s">
+      <span>Scroll Down</span>
+      <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
   </div>
 
@@ -21,11 +57,7 @@
                decoding="async"
                loading="eager">
           <div class="image-overlay"></div>
-          <div class="price-tag">
-            <span class="currency">$</span>
-            <span class="amount">{{ hotel.price_per_night }}</span>
-            <span class="period">/night</span>
-          </div>
+
         </div>
         
         <mat-card-header>

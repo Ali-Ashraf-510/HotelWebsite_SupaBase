@@ -1,5 +1,7 @@
 <div class="hotel-list-container">
-  <h2 class="section-title">Our Luxury Hotels</h2>
+  <h2 class="section-title">
+    {{ searchParams.location ? 'Hotels in ' + searchParams.location : 'Our Luxury Hotels' }}
+  </h2>
 
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" class="loading-progress"></mat-progress-bar>
 
@@ -8,13 +10,13 @@
     <p>{{ error }}</p>
   </div>
 
-  <div *ngIf="!isLoading && !error && hotels.length === 0" class="no-hotels">
+  <div *ngIf="!isLoading && !error && filteredHotels.length === 0" class="no-hotels">
     <mat-icon>hotel</mat-icon>
-    <p>No hotels found</p>
+    <p>No hotels found{{ searchParams.location ? ' in ' + searchParams.location : '' }}</p>
   </div>
 
-  <div *ngIf="!isLoading && !error && hotels.length > 0" class="hotels-grid">
-    <mat-card *ngFor="let hotel of hotels; trackBy: trackByHotelId" class="hotel-card">
+  <div *ngIf="!isLoading && !error && filteredHotels.length > 0" class="hotels-grid">
+    <mat-card *ngFor="let hotel of filteredHotels; trackBy: trackByHotelId" class="hotel-card">
       <div class="card-image-container">
         <img [src]="hotel.image_url" 
              [alt]="hotel.name" 
@@ -22,11 +24,7 @@
              decoding="async"
              loading="eager">
         <div class="image-overlay"></div>
-        <div class="price-tag">
-          <span class="currency">$</span>
-          <span class="amount">{{ hotel.price_per_night }}</span>
-          <span class="period">/night</span>
-        </div>
+  
       </div>
       
       <mat-card-header>
@@ -50,10 +48,6 @@
           <div class="stat-item">
             <mat-icon>hotel</mat-icon>
             <span>{{ hotel.rooms_count }} Rooms</span>
-          </div>
-          <div class="stat-item">
-            <mat-icon>attach_money</mat-icon>
-            <span>From ${{ hotel.price_per_night }}/night</span>
           </div>
         </div>
 
