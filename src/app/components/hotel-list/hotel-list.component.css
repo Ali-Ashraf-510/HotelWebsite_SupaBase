@@ -1,3 +1,11 @@
+/* Import Modern Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Typography Base */
+:host {
+  font-family: 'Poppins', sans-serif;
+}
+
 /* Main Container */
 .hotel-list-container {
   max-width: 1400px;
@@ -20,10 +28,11 @@
   margin-bottom: 3rem;
   font-size: 2.5rem;
   color: #2D3748;
-  font-weight: 800;
+  font-weight: 700;
   position: relative;
   padding-bottom: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: -0.02em;
 }
 
 .section-title::after {
@@ -112,6 +121,8 @@
   margin-left: 0.5rem;
   color: #718096;
   font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
 }
 
 /* Hotel Stats */
@@ -143,6 +154,8 @@
   color: #4A5568;
   font-size: 0.95rem;
   font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.01em;
 }
 
 /* Location */
@@ -150,6 +163,9 @@
   display: flex;
   align-items: center;
   color: #718096;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .location-icon {
@@ -164,10 +180,12 @@
 .hotel-description {
   padding: 1.5rem;
   color: #4A5568;
-  line-height: 1.6;
+  line-height: 1.7;
   font-size: 1rem;
   border-bottom: 1px solid #EDF2F7;
   margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
 }
 
 /* Amenities Section */
@@ -201,6 +219,8 @@
   color: #4A5568;
   font-size: 0.95rem;
   font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.01em;
 }
 
 /* Hotel Features */
@@ -231,6 +251,8 @@
   color: #4A5568;
   font-size: 0.9rem;
   font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.01em;
 }
 
 /* Card Actions */
@@ -251,6 +273,8 @@ button[mat-raised-button] {
   justify-content: center;
   gap: 0.75rem;
   border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.02em;
 }
 
 button[mat-raised-button][color="primary"] {
@@ -291,6 +315,8 @@ button[mat-raised-button][color="primary"]:hover {
   font-size: 1.25rem;
   font-weight: 500;
   margin: 0;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.01em;
 }
 
 /* Loading Message */
@@ -308,6 +334,15 @@ button[mat-raised-button][color="primary"]:hover {
   font-size: 1.25rem;
   font-weight: 500;
   margin: 0;
+}
+
+/* Hotel Card Title */
+mat-card-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  color: #1A202C;
 }
 
 /* Responsive Design */
@@ -345,6 +380,14 @@ button[mat-raised-button][color="primary"]:hover {
   .hotel-features {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  mat-card-title {
+    font-size: 1.35rem;
+  }
+
+  .hotel-description {
+    font-size: 0.95rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -357,7 +400,7 @@ button[mat-raised-button][color="primary"]:hover {
   }
 
   mat-card-title {
-    font-size: 1.25rem !important;
+    font-size: 1.25rem;
   }
 
   .hotel-features {
@@ -372,5 +415,9 @@ button[mat-raised-button][color="primary"]:hover {
 
   .amount {
     font-size: 1.25rem;
+  }
+
+  .hotel-description {
+    font-size: 0.9rem;
   }
 }
