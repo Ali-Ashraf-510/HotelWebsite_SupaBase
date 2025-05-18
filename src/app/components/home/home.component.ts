@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   private async loadFeaturedHotels() {
     try {
       this.loading = true;
-      const { data, error } = await this.supabase.getHotelsWithDetails();
+      const { data, error } = await this.supabase.getHotels();
       
       if (error) throw error;
       
@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
       const hotelsWithRating = (data || []).map(hotel => ({
         ...hotel,
         rating: hotel.reviews.length 
-          ? hotel.reviews.reduce((acc, review) => acc + review.rating, 0) / hotel.reviews.length 
+          ? hotel.reviews.reduce((acc: number, review: { rating: number }) => acc + review.rating, 0) / hotel.reviews.length 
           : 0
       })) as HotelWithRating[];
       
