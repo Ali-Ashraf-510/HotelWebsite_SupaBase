@@ -59,7 +59,7 @@
           [max]="selectedRoom.max_occupancy"
           required
         />
-        <mat-hint>Additional guest: +$100 per night</mat-hint>
+    
         <mat-error *ngIf="bookingForm.controls['guests']?.errors?.['required']">Number of guests is required</mat-error>
       </mat-form-field>
 
@@ -154,4 +154,5 @@
       </button>
     </form>
   </div>
+  
 </div>
