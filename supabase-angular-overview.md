@@ -19,26 +19,39 @@ this.supabase = createClient(this.supabaseUrl, this.supabaseKey);
 
 ### 🔐 تسجيل الدخول
 ```ts
-supabase.auth.signInWithPassword({ email, password });
+async signIn(email: string, password: string) {
+  const response = await this.supabase.auth.signInWithPassword({ email, password });
+  this.currentUser.next(response.data.user);
+  return response;
+}
 ```
 
 ### 📝 إنشاء حساب
 ```ts
-supabase.auth.signUp({
-  email,
-  password,
-  options: { data: { name } }
-});
+async signUp(email: string, password: string, name: string) {
+  const response = await this.supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { name } }
+  });
+  this.currentUser.next(response.data.user);
+  return response;
+}
 ```
 
 ### 🚪 تسجيل الخروج
 ```ts
-supabase.auth.signOut();
+async signOut() {
+  await this.supabase.auth.signOut();
+  this.currentUser.next(null);
+}
 ```
 
 ### 👁️ الحصول على المستخدم الحالي
 ```ts
-supabase.auth.getUser();
+async getCurrentUser() {
+  return await this.supabase.auth.getUser();
+}
 ```
 
 ---
@@ -47,22 +60,62 @@ supabase.auth.getUser();
 
 ### 📦 جلب كل الفنادق
 ```ts
-supabase.from('hotels').select(`*, rooms(count), reviews(rating)`)
+async getHotels() {
+  const { data, error } = await this.supabase
+    .from('hotels')
+    .select(`
+      *,
+      rooms (
+        count
+      ),
+      reviews (
+        rating
+      )
+    `)
+    .order('name');
+
+  // حساب متوسط التقييم لكل فندق
+  const hotelsWithRating = data?.map(hotel => ({
+    ...hotel,
+    average_rating: hotel.reviews?.length 
+      ? hotel.reviews.reduce((acc: number, review: any) => acc + review.rating, 0) / hotel.reviews.length 
+      : 0,
+    rooms_count: hotel.rooms?.[0]?.count || 0
+  }));
+
+  return { data: hotelsWithRating, error: null };
+}
 ```
 
 ### 🏨 جلب فندق معين
 ```ts
-supabase.from('hotels').select('*').eq('id', id)
+async getHotelById(id: string) {
+  return await this.supabase
+    .from('hotels')
+    .select('*')
+    .eq('id', id)
+    .single();
+}
 ```
 
 ### 🛏️ جلب غرف فندق معين
 ```ts
-supabase.from('rooms').select('*').eq('hotel_id', hotelId)
+async getRoomsByHotelId(hotelId: string) {
+  return await this.supabase
+    .from('rooms')
+    .select('*')
+    .eq('hotel_id', hotelId);
+}
 ```
 
 ### ✅ تحديث حالة التوفر لغرفة
 ```ts
-supabase.from('rooms').update({ is_available }).eq('id', roomId)
+async updateRoomAvailability(roomId: string, isAvailable: boolean) {
+  return await this.supabase
+    .from('rooms')
+    .update({ is_available: isAvailable })
+    .eq('id', roomId);
+}
 ```
 
 ---
@@ -71,18 +124,63 @@ supabase.from('rooms').update({ is_available }).eq('id', roomId)
 
 ### ➕ إنشاء حجز
 ```ts
-supabase.from('bookings').insert({ ... })
+async createBooking(bookingData: {
+  room_id: string;
+  check_in: string;
+  check_out: string;
+  total_price: number;
+}) {
+  const user = await this.getCurrentUser();
+  if (!user.data.user) throw new Error('User not authenticated');
+
+  return await this.supabase
+    .from('bookings')
+    .insert({
+      user_id: user.data.user.id,
+      room_id: bookingData.room_id,
+      check_in: bookingData.check_in,
+      check_out: bookingData.check_out,
+      total_price: bookingData.total_price,
+      status: 'pending',
+      payment_status: 'pending'
+    });
+}
 ```
 
 ### 📄 جلب حجوزات المستخدم
 ```ts
-supabase.from('bookings').select(`*, rooms(*, hotels(*))`).eq('user_id', userId)
+async getUserBookings() {
+  const user = await this.getCurrentUser();
+  if (!user.data.user) throw new Error('User not authenticated');
+
+  return await this.supabase
+    .from('bookings')
+    .select(`
+      *,
+      rooms (
+        *,
+        hotels (*)
+      )
+    `)
+    .eq('user_id', user.data.user.id);
+}
 ```
 
 ### 🔄 تحديث حالة الحجز / الدفع
 ```ts
-supabase.from('bookings').update({ status }).eq('id', bookingId)
-supabase.from('bookings').update({ payment_status }).eq('id', bookingId)
+async updateBookingStatus(bookingId: string, status: string) {
+  return await this.supabase
+    .from('bookings')
+    .update({ status })
+    .eq('id', bookingId);
+}
+
+async updatePaymentStatus(bookingId: string, paymentStatus: string) {
+  return await this.supabase
+    .from('bookings')
+    .update({ payment_status: paymentStatus })
+    .eq('id', bookingId);
+}
 ```
 
 ---
@@ -91,26 +189,36 @@ supabase.from('bookings').update({ payment_status }).eq('id', bookingId)
 
 ### ✍️ إنشاء تقييم
 ```ts
-supabase.from('reviews').insert({ user_id, hotel_id, rating, comment })
+async createReview(reviewData: {
+  hotel_id: string;
+  rating: number;
+  comment: string;
+}) {
+  const user = await this.getCurrentUser();
+  if (!user.data.user) throw new Error('User not authenticated');
+
+  return await this.supabase
+    .from('reviews')
+    .insert({
+      user_id: user.data.user.id,
+      hotel_id: reviewData.hotel_id,
+      rating: reviewData.rating,
+      comment: reviewData.comment
+    });
+}
 ```
 
 ### 👁️ عرض التقييمات لفندق
 ```ts
-supabase.from('reviews').select(`*, users(name)`).eq('hotel_id', hotelId)
-```
-
----
-
-## 🧑‍💼 6. الملف الشخصي
-
-### تحديث الملف الشخصي
-```ts
-supabase.from('users').update(profileData).eq('id', userId)
-```
-
-### جلب الملف الشخصي
-```ts
-supabase.from('users').select('*').eq('id', userId).single()
+async getHotelReviews(hotelId: string) {
+  return await this.supabase
+    .from('reviews')
+    .select(`
+      *,
+      users (name)
+    `)
+    .eq('hotel_id', hotelId);
+}
 ```
 
 ---
@@ -120,6 +228,7 @@ supabase.from('users').select('*').eq('id', userId).single()
 1. **SupabaseService** في Angular يحتوي على كل الوظائف التي تتعامل مع Supabase.
 2. كل وظيفة تتعامل مباشرة مع الجداول باستخدام `supabase.from('table')`.
 3. تتم المصادقة وإدارة الجلسات باستخدام `supabase.auth`.
+4. يتم استخدام `BehaviorSubject` لتتبع حالة المستخدم الحالي.
 
 ---
 
