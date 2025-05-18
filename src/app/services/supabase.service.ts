@@ -309,33 +309,6 @@ export class SupabaseService {
       .eq('hotel_id', hotelId);
   }
 
-  // ============== طرق الملف الشخصي ==============
-
-  /**
-   * تحديث الملف الشخصي للمستخدم
-   * @param profileData بيانات الملف الشخصي
-   */
-  async updateUserProfile(profileData: { name: string }) {
-    const user = await this.getCurrentUser();
-    if (!user.data.user) throw new Error('User not authenticated');
-
-    return await this.supabase
-      .from('users')
-      .update(profileData)
-      .eq('id', user.data.user.id);
-  }
-
-  /**
-   * الحصول على الملف الشخصي للمستخدم
-   */
-  async getUserProfile() {
-    const user = await this.getCurrentUser();
-    if (!user.data.user) throw new Error('User not authenticated');
-
-    return await this.supabase
-      .from('users')
-      .select('*')
-      .eq('id', user.data.user.id)
-      .single();
-  }
+  
+  
 }
