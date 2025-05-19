@@ -10,13 +10,13 @@
     <p>{{ error }}</p>
   </div>
 
-  <div *ngIf="!isLoading && !error && filteredHotels.length === 0" class="no-hotels">
+  <div *ngIf="!isLoading && !error && hotels.length === 0" class="no-hotels">
     <mat-icon>hotel</mat-icon>
     <p>No hotels found{{ searchParams.location ? ' in ' + searchParams.location : '' }}</p>
   </div>
 
-  <div *ngIf="!isLoading && !error && filteredHotels.length > 0" class="hotels-grid">
-    <mat-card *ngFor="let hotel of filteredHotels; trackBy: trackByHotelId" class="hotel-card">
+  <div *ngIf="!isLoading && !error && hotels.length > 0" class="hotels-grid">
+    <mat-card *ngFor="let hotel of hotels; trackBy: trackByHotelId" class="hotel-card">
       <div class="card-image-container">
         <img [src]="hotel.image_url" 
              [alt]="hotel.name" 

@@ -40,8 +40,6 @@ interface HotelWithDetails extends Hotel {
 export class HotelListComponent implements OnInit {
   // قائمة جميع الفنادق مع التفاصيل
   hotels: HotelWithDetails[] = [];
-  // قائمة الفنادق بعد التصفية
-  filteredHotels: HotelWithDetails[] = [];
   // مؤشر التحميل
   isLoading = true;
   // رسالة الخطأ (إن وجدت)
@@ -88,7 +86,7 @@ export class HotelListComponent implements OnInit {
       }
 
       this.hotels = data as HotelWithDetails[];
-      this.filterHotels(); // تصفية الفنادق حسب معايير البحث
+      // لم تعد هناك تصفية
       
     } catch (error) {
       console.error('Error fetching hotels:', error);
@@ -96,17 +94,6 @@ export class HotelListComponent implements OnInit {
     } finally {
       this.isLoading = false;
     }
-  }
-
-  // تصفية الفنادق حسب الموقع (ويمكن إضافة معايير أخرى)
-  private filterHotels() {
-    this.filteredHotels = this.hotels.filter(hotel => {
-      if (this.searchParams.location && 
-          !hotel.location.toLowerCase().includes(this.searchParams.location.toLowerCase())) {
-        return false;
-      }
-      return true;
-    });
   }
 
   // دالة مساعدة لعرض عدد النجوم حسب التقييم
