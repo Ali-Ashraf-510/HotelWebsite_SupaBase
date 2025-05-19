@@ -1,3 +1,7 @@
+/**
+ * مكون عرض وإدارة حجوزات المستخدم
+ * يقوم بعرض قائمة الحجوزات الخاصة بالمستخدم وإمكانية إلغائها
+ */
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -26,8 +30,11 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./my-bookings.component.css']
 })
 export class MyBookingsComponent implements OnInit {
+  // مصفوفة لتخزين حجوزات المستخدم
   bookings: any[] = [];
+  // متغير للتحكم في حالة التحميل
   loading = true;
+  // متغير لتخزين معلومات المستخدم الحالي
   user: any = null;
 
   constructor(
@@ -36,10 +43,18 @@ export class MyBookingsComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
+  /**
+   * دالة تنفذ عند تهيئة المكون
+   * تقوم بالتحقق من حالة تسجيل دخول المستخدم
+   */
   async ngOnInit() {
     await this.checkAuth();
   }
 
+  /**
+   * دالة للتحقق من حالة تسجيل دخول المستخدم
+   * إذا لم يكن المستخدم مسجل الدخول، يتم توجيهه لصفحة تسجيل الدخول
+   */
   private async checkAuth() {
     try {
       const { data: { user }, error: authError } = await this.supabaseService.client.auth.getUser();
@@ -60,6 +75,10 @@ export class MyBookingsComponent implements OnInit {
     }
   }
 
+  /**
+   * دالة لتحميل حجوزات المستخدم من قاعدة البيانات
+   * تقوم بجلب الحجوزات مع معلومات الغرف والفنادق المرتبطة بها
+   */
   async loadBookings() {
     if (!this.user) {
       return;
@@ -98,6 +117,11 @@ export class MyBookingsComponent implements OnInit {
     }
   }
 
+  /**
+   * دالة لتحديد لون حالة الحجز
+   * @param status حالة الحجز (confirmed, pending, cancelled)
+   * @returns لون مناسب للحالة
+   */
   getStatusColor(status: string): string {
     switch (status) {
       case 'confirmed':
@@ -111,6 +135,11 @@ export class MyBookingsComponent implements OnInit {
     }
   }
 
+  /**
+   * دالة لتحديد لون حالة الدفع
+   * @param status حالة الدفع (paid, pending, failed)
+   * @returns لون مناسب للحالة
+   */
   getPaymentStatusColor(status: string): string {
     switch (status) {
       case 'paid':
@@ -124,6 +153,11 @@ export class MyBookingsComponent implements OnInit {
     }
   }
 
+  /**
+   * دالة لتنسيق التاريخ بشكل مناسب
+   * @param date التاريخ المراد تنسيقه
+   * @returns التاريخ منسق بالشكل المطلوب
+   */
   formatDate(date: string): string {
     return new Date(date).toLocaleDateString('en-GB', {
       year: 'numeric',
@@ -133,6 +167,10 @@ export class MyBookingsComponent implements OnInit {
     });
   }
 
+  /**
+   * دالة لإلغاء حجز
+   * @param bookingId معرف الحجز المراد إلغاؤه
+   */
   async cancelBooking(bookingId: string) {
     if (!this.user) {
       this.snackBar.open('يرجى تسجيل الدخول لإلغاء الحجز', 'إغلاق', {
@@ -162,6 +200,7 @@ export class MyBookingsComponent implements OnInit {
         throw new Error('غير مصرح لك بإلغاء هذا الحجز');
       }
 
+      // حذف الحجز من قاعدة البيانات
       const { error: deleteError } = await this.supabaseService.client
         .from('bookings')
         .delete()
