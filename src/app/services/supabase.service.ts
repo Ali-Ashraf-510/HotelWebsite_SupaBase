@@ -6,12 +6,12 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class SupabaseService {
-  // المتغيرات الأساسية
+  // ============== المتغيرات الأساسية ==============
   private supabase: SupabaseClient;
   private supabaseUrl = 'https://dkzrqbsqxqrzmjffqzwc.supabase.co';
   private supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRrenJxYnNxeHFyem1qZmZxendjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjAwMTgsImV4cCI6MjA2MTA5NjAxOH0.heSe87mSxCEvzwY6wSx-6AtY3u4h9WyTEhnEpLzeVgg';
 
-  // متغير لتخزين حالة المستخدم الحالي
+  // متغير لتخزين حالة المستخدم الحالي - يستخدم في جميع المكونات التي تحتاج معرفة حالة المستخدم
   public currentUser = new BehaviorSubject<User | null>(null);
 
   constructor() {
@@ -20,7 +20,7 @@ export class SupabaseService {
     this.loadCurrentUser();
   }
 
-  // الحصول على عميل Supabase
+  // الحصول على عميل Supabase - يستخدم في المكونات التي تحتاج الوصول المباشر لـ Supabase
   get client() {
     return this.supabase;
   }
@@ -29,6 +29,9 @@ export class SupabaseService {
 
   /**
    * تحميل بيانات المستخدم الحالي
+   * تستخدم في: 
+   * - app.component.ts (عند بدء التطبيق)
+   * - auth.guard.ts (للتحقق من حالة تسجيل الدخول)
    */
   private async loadCurrentUser() {
     const { data, error } = await this.supabase.auth.getUser();
@@ -42,6 +45,8 @@ export class SupabaseService {
 
   /**
    * تسجيل الدخول
+   * تستخدم في:
+   * - login.component.ts (عند تسجيل دخول المستخدم)
    * @param email البريد الإلكتروني
    * @param password كلمة المرور
    */
@@ -66,6 +71,8 @@ export class SupabaseService {
 
   /**
    * إنشاء حساب جديد
+   * تستخدم في:
+   * - sign-up.component.ts (عند إنشاء حساب جديد)
    * @param email البريد الإلكتروني
    * @param password كلمة المرور
    * @param name اسم المستخدم
@@ -97,6 +104,8 @@ export class SupabaseService {
 
   /**
    * تسجيل الخروج
+   * تستخدم في:
+   * - header.component.ts (عند الضغط على زر تسجيل الخروج)
    */
   async signOut() {
     await this.supabase.auth.signOut();
@@ -105,6 +114,9 @@ export class SupabaseService {
 
   /**
    * الحصول على بيانات المستخدم الحالي
+   * تستخدم في:
+   * - booking-form.component.ts (للتحقق من المستخدم قبل الحجز)
+   * - my-bookings.component.ts (لعرض حجوزات المستخدم)
    */
   async getCurrentUser() {
     return await this.supabase.auth.getUser();
@@ -114,6 +126,9 @@ export class SupabaseService {
 
   /**
    * الحصول على جميع الفنادق
+   * تستخدم في:
+   * - home.component.ts (عرض قائمة الفنادق في الصفحة الرئيسية)
+   * - hotel-list.component.ts (عرض قائمة الفنادق في صفحة البحث)
    */
   async getHotels() {
     try {
@@ -135,7 +150,7 @@ export class SupabaseService {
         throw error;
       }
 
-      // Calculate average rating for each hotel
+      // حساب متوسط التقييم لكل فندق
       const hotelsWithRating = data?.map(hotel => ({
         ...hotel,
         average_rating: hotel.reviews?.length 
@@ -153,6 +168,8 @@ export class SupabaseService {
 
   /**
    * الحصول على فندق محدد
+   * تستخدم في:
+   * - hotel-details.component.ts (عرض تفاصيل الفندق)
    * @param id معرف الفندق
    */
   async getHotelById(id: string) {
@@ -167,6 +184,8 @@ export class SupabaseService {
 
   /**
    * الحصول على غرف فندق محدد
+   * تستخدم في:
+   * - hotel-details.component.ts (عرض الغرف المتاحة في الفندق)
    * @param hotelId معرف الفندق
    */
   async getRoomsByHotelId(hotelId: string) {
@@ -176,34 +195,12 @@ export class SupabaseService {
       .eq('hotel_id', hotelId);
   }
 
-  /**
-   * الحصول على الغرف المتاحة في فندق محدد
-   * @param hotelId معرف الفندق
-   */
-  async getAvailableRooms(hotelId: string) {
-    return await this.supabase
-      .from('rooms')
-      .select('*')
-      .eq('hotel_id', hotelId)
-      .eq('is_available', true);
-  }
-
-  /**
-   * تحديث حالة توفر الغرفة
-   * @param roomId معرف الغرفة
-   * @param isAvailable حالة التوفر
-   */
-  async updateRoomAvailability(roomId: string, isAvailable: boolean) {
-    return await this.supabase
-      .from('rooms')
-      .update({ is_available: isAvailable })
-      .eq('id', roomId);
-  }
-
   // ============== طرق الحجوزات ==============
 
   /**
    * إنشاء حجز جديد
+   * تستخدم في:
+   * - booking-form.component.ts (عند تأكيد الحجز)
    * @param bookingData بيانات الحجز
    */
   async createBooking(bookingData: {
@@ -230,6 +227,8 @@ export class SupabaseService {
 
   /**
    * الحصول على حجوزات المستخدم
+   * تستخدم في:
+   * - my-bookings.component.ts (عرض حجوزات المستخدم)
    */
   async getUserBookings() {
     const user = await this.getCurrentUser();
@@ -249,6 +248,8 @@ export class SupabaseService {
 
   /**
    * تحديث حالة الحجز
+   * تستخدم في:
+   * - my-bookings.component.ts (عند إلغاء الحجز)
    * @param bookingId معرف الحجز
    * @param status الحالة الجديدة
    */
@@ -261,6 +262,8 @@ export class SupabaseService {
 
   /**
    * تحديث حالة الدفع
+   * تستخدم في:
+   * - payment.component.ts (عند إتمام عملية الدفع)
    * @param bookingId معرف الحجز
    * @param paymentStatus حالة الدفع الجديدة
    */
@@ -275,6 +278,8 @@ export class SupabaseService {
 
   /**
    * إنشاء تقييم جديد
+   * تستخدم في:
+   * - hotel-details.component.ts (عند إضافة تقييم جديد)
    * @param reviewData بيانات التقييم
    */
   async createReview(reviewData: {
@@ -297,6 +302,8 @@ export class SupabaseService {
 
   /**
    * الحصول على تقييمات فندق محدد
+   * تستخدم في:
+   * - hotel-details.component.ts (عرض تقييمات الفندق)
    * @param hotelId معرف الفندق
    */
   async getHotelReviews(hotelId: string) {
@@ -308,7 +315,4 @@ export class SupabaseService {
       `)
       .eq('hotel_id', hotelId);
   }
-
-  
-  
 }

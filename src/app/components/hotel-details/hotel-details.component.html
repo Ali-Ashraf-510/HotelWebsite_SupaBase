@@ -22,9 +22,6 @@
               <span class="room-detail">
                 <i class="fas fa-users"></i> Max Occupancy: {{ room.max_occupancy }}
               </span>
-              <span class="room-detail" [class.room-available]="room.is_available" [class.room-unavailable]="!room.is_available">
-                {{ room.is_available ? 'Available' : 'Not Available' }}
-              </span>
             </div>
             <p class="room-description">{{ room.description }}</p>
           </div>

@@ -119,24 +119,6 @@ mat-card-content {
   margin-bottom: 1rem;
 }
 
-.room-availability {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.room-available {
-  background-color: #D1FAE5;
-  color: #059669;
-}
-
-.room-unavailable {
-  background-color: #FEE2E2;
-  color: #DC2626;
-}
-
 /* Reviews Section */
 .reviews-section {
   margin-top: 2.5rem;

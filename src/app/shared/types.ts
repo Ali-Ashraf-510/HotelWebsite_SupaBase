@@ -24,7 +24,6 @@ export interface Room {
   max_occupancy: number;
   description: string | null;
   image_url: string | null;
-  is_available: boolean;
   created_at: string;
   deleted_at: string | null;
 }
