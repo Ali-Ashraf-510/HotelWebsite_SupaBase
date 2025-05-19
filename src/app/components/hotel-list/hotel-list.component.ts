@@ -8,22 +8,25 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Hotel } from '../../shared/types';
 
+// واجهة معايير البحث
 interface SearchParams {
-  location: string;
-  guests: number;
-  checkIn: string | null;
-  checkOut: string | null;
+  location: string; // موقع الفندق
+  guests: number; // عدد الضيوف
+  checkIn: string | null; // تاريخ الدخول
+  checkOut: string | null; // تاريخ الخروج
 }
 
+// واجهة بيانات الفندق مع تفاصيل إضافية
 interface HotelWithDetails extends Hotel {
-  average_rating: number;
-  rooms_count: number;
+  average_rating: number; // متوسط التقييمات
+  rooms_count: number; // عدد الغرف المتاحة
 }
 
 @Component({
   selector: 'app-hotel-list',
   standalone: true,
   imports: [
+    // استيراد الوحدات اللازمة للنموذج وواجهة المستخدم
     CommonModule,
     RouterLink,
     MatCardModule,
@@ -35,10 +38,15 @@ interface HotelWithDetails extends Hotel {
   styleUrls: ['./hotel-list.component.css']
 })
 export class HotelListComponent implements OnInit {
+  // قائمة جميع الفنادق مع التفاصيل
   hotels: HotelWithDetails[] = [];
+  // قائمة الفنادق بعد التصفية
   filteredHotels: HotelWithDetails[] = [];
+  // مؤشر التحميل
   isLoading = true;
+  // رسالة الخطأ (إن وجدت)
   error: string | null = null;
+  // معايير البحث الحالية
   searchParams: SearchParams = {
     location: '',
     guests: 1,
@@ -47,11 +55,13 @@ export class HotelListComponent implements OnInit {
   };
 
   constructor(
-    private supabase: SupabaseService,
-    private route: ActivatedRoute
+    private supabase: SupabaseService, // خدمة التعامل مع Supabase
+    private route: ActivatedRoute // لجلب معايير البحث من الرابط
   ) {}
 
+  // عند تحميل المكون
   ngOnInit() {
+    // الاشتراك في متغيرات البحث من الرابط
     this.route.queryParams.subscribe(params => {
       this.searchParams = {
         location: params['location'] || '',
@@ -59,10 +69,11 @@ export class HotelListComponent implements OnInit {
         checkIn: params['checkIn'] || null,
         checkOut: params['checkOut'] || null
       };
-      this.fetchHotels();
+      this.fetchHotels(); // جلب الفنادق عند تغيير معايير البحث
     });
   }
 
+  // جلب جميع الفنادق من قاعدة البيانات عبر الخدمة
   private async fetchHotels() {
     try {
       this.isLoading = true;
@@ -77,7 +88,7 @@ export class HotelListComponent implements OnInit {
       }
 
       this.hotels = data as HotelWithDetails[];
-      this.filterHotels();
+      this.filterHotels(); // تصفية الفنادق حسب معايير البحث
       
     } catch (error) {
       console.error('Error fetching hotels:', error);
@@ -87,6 +98,7 @@ export class HotelListComponent implements OnInit {
     }
   }
 
+  // تصفية الفنادق حسب الموقع (ويمكن إضافة معايير أخرى)
   private filterHotels() {
     this.filteredHotels = this.hotels.filter(hotel => {
       if (this.searchParams.location && 
@@ -97,10 +109,12 @@ export class HotelListComponent implements OnInit {
     });
   }
 
+  // دالة مساعدة لعرض عدد النجوم حسب التقييم
   getStarRating(rating: number): number[] {
     return Array(Math.round(rating)).fill(0);
   }
 
+  // دالة تتبع العناصر في القائمة (لتحسين الأداء)
   trackByHotelId(index: number, hotel: HotelWithDetails): string {
     return hotel.id;
   }

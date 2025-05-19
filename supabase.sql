@@ -11,7 +11,7 @@ CREATE TABLE users (
 
 -- Add foreign key constraint to auth.users
 ALTER TABLE users
-ADD CONSTRAINT fk_auth_users FOREIGN KEY (id) REFERENCES auth.users(id);
+  ADD CONSTRAINT fk_auth_users FOREIGN KEY (id) REFERENCES auth.users(id);
 
 -- Create hotels table
 CREATE TABLE hotels (
@@ -20,6 +20,19 @@ CREATE TABLE hotels (
   location TEXT NOT NULL,
   description TEXT,
   image_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create rooms table
+CREATE TABLE rooms (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  hotel_id UUID REFERENCES hotels(id) ON DELETE CASCADE,
+  room_type TEXT NOT NULL, -- e.g., Standard, Deluxe, Suite
+  price_per_night NUMERIC NOT NULL,
+  max_occupancy INTEGER NOT NULL, -- e.g., 2 for double, 4 for family
+  description TEXT,
+  image_url TEXT,
+  is_available BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -34,6 +47,7 @@ CREATE TABLE bookings (
   status TEXT DEFAULT 'pending',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 -- Alter bookings table to reference rooms instead of hotels
 ALTER TABLE bookings
   DROP COLUMN hotel_id,
@@ -41,15 +55,18 @@ ALTER TABLE bookings
 
 -- Add payment_status column to bookings table
 ALTER TABLE bookings
-ADD COLUMN payment_status TEXT DEFAULT 'pending';
+  ADD COLUMN payment_status TEXT DEFAULT 'pending';
 
 -- Add status validation
 ALTER TABLE bookings
-ADD CONSTRAINT valid_status CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed'));
+  ADD CONSTRAINT valid_status CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed'));
 
 ALTER TABLE bookings
-ADD CONSTRAINT valid_payment_status CHECK (payment_status IN ('pending', 'paid', 'refunded', 'failed'));
+  ADD CONSTRAINT valid_payment_status CHECK (payment_status IN ('pending', 'paid', 'refunded', 'failed'));
 
+-- Add date validation
+ALTER TABLE bookings
+  ADD CONSTRAINT valid_dates CHECK (check_in < check_out);
 
 -- Create reviews table
 CREATE TABLE reviews (
@@ -60,18 +77,10 @@ CREATE TABLE reviews (
   comment TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
--- Create rooms table
-CREATE TABLE rooms (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  hotel_id UUID REFERENCES hotels(id) ON DELETE CASCADE,
-  room_type TEXT NOT NULL, -- e.g., Standard, Deluxe, Suite
-  price_per_night NUMERIC NOT NULL,
-  max_occupancy INTEGER NOT NULL, -- e.g., 2 for double, 4 for family
-  description TEXT,
-  image_url TEXT,
-  is_available BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+
+-- Add price validation
+ALTER TABLE rooms
+  ADD CONSTRAINT valid_price CHECK (price_per_night > 0);
 
 -- Create function to handle new user creation
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -84,6 +93,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+-- Create trigger for new user creation
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- Insert data into hotels table
 INSERT INTO hotels (name, location, price_per_night, description, image_url)
@@ -98,9 +111,7 @@ VALUES
   ('Palm Garden Resort', 'Marsa Alam', 140.00, 'Secluded resort with private beach', 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/634226852.jpg?k=761ed548637c81ec8a92d639ae744e71cfa3120ed8d4a5f4a1c53038286b279f&o=&hp=1'),
   ('Lighthouse Hotel', 'Port Said', 95.00, 'Coastal escape with lighthouse views', 'https://static.wixstatic.com/media/fb30c2_2421a41b09e04a8699acb6315a0236cc~mv2.jpeg/v1/fill/w_560,h_372,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Brightly%20Lit%20Lighthouse.jpeg'),
   ('Luxor Royal Hotel', 'Luxor', 125.00, 'Steps from the Karnak Temple', 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/469002076.jpg?k=fa2d59d5f833a84016cf07b13e66e29ff0cb6eef3f26f4a1c53038286b279f&o=&hp=1'),
-  ('Nile Garden Inn', 'Minya', 70.00, 'Budget hotel with garden and Nile view', 'https://imgcy.trivago.com/c_fill,d_dummy.jpeg,e_sharpen:60,f_auto,h_267,q_40,w_400/hotelier-images/76/cb/d5774212aed209d83466283b2f4dee58c1c24144b37a02bb26e03b52fe53.jpeg')
-
-
+  ('Nile Garden Inn', 'Minya', 70.00, 'Budget hotel with garden and Nile view', 'https://imgcy.trivago.com/c_fill,d_dummy.jpeg,e_sharpen:60,f_auto,h_267,q_40,w_400/hotelier-images/76/cb/d5774212aed209d83466283b2f4dee58c1c24144b37a02bb26e03b52fe53.jpeg');
 
 -- Insert sample data into rooms table
 INSERT INTO rooms (hotel_id, room_type, price_per_night, max_occupancy, description, image_url, is_available)
@@ -120,7 +131,48 @@ VALUES
   ((SELECT id FROM hotels WHERE name = 'Luxor Royal Hotel'), 'Temple View Room', 125.00, 2, 'Room near Karnak Temple', 'https://example.com/images/temple_room.jpg', TRUE),
   ((SELECT id FROM hotels WHERE name = 'Nile Garden Inn'), 'Garden Room', 70.00, 2, 'Budget room with Nile view', 'https://example.com/images/garden_room.jpg', TRUE);
 
--- Create trigger for new user creation
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+-- Indexes for common query patterns
+CREATE INDEX idx_hotels_location ON hotels(location);
+CREATE INDEX idx_bookings_dates ON bookings(check_in, check_out);
+CREATE INDEX idx_rooms_hotel_availability ON rooms(hotel_id, is_available);
+CREATE INDEX idx_reviews_hotel ON reviews(hotel_id);
+
+-- -- Create policies for users table
+-- CREATE POLICY "Users can view their own data" ON users
+--   FOR SELECT USING (auth.uid() = id);
+
+-- CREATE POLICY "Users can update their own data" ON users
+--   FOR UPDATE USING (auth.uid() = id);
+
+-- -- Create policies for bookings table
+-- CREATE POLICY "Users can view their bookings" ON bookings
+--   FOR SELECT USING (auth.uid() = user_id);
+
+-- CREATE POLICY "Authenticated users can create bookings" ON bookings
+--   FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- CREATE POLICY "Users can update their bookings" ON bookings
+--   FOR UPDATE USING (auth.uid() = user_id);
+
+-- -- Create policies for rooms table
+-- CREATE POLICY "Anyone can view rooms" ON rooms
+--   FOR SELECT USING (TRUE);
+
+-- CREATE POLICY "Authenticated users can create rooms" ON rooms
+--   FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+
+-- CREATE POLICY "Authenticated users can update rooms" ON rooms
+--   FOR UPDATE USING (auth.uid() IS NOT NULL);
+
+-- CREATE POLICY "Users can view all reviews" ON reviews
+--   FOR SELECT USING (TRUE);
+
+-- CREATE POLICY "Users can create reviews" ON reviews
+--   FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- CREATE POLICY "Users can update their own reviews" ON reviews
+--   FOR UPDATE USING (auth.uid() = user_id);
+
+-- -- Add policies for hotels
+-- CREATE POLICY "Anyone can view hotels" ON hotels
+--   FOR SELECT USING (TRUE);

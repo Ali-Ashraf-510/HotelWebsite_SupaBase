@@ -78,7 +78,6 @@ export class HotelDetailsComponent implements OnInit {
       if (hotelError) throw new Error(`Error loading hotel: ${hotelError}`);
       if (!hotelData) throw new Error('Hotel not found');
       
-      // Calculate average rating
       const { data: reviewsData } = await this.supabaseService.client
         .from('reviews')
         .select('rating')

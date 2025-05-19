@@ -12,7 +12,7 @@ import { MatNativeDateModule, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } f
 import { MatIconModule } from '@angular/material/icon';
 import Swal from 'sweetalert2';
 
-// Custom date formats
+// تنسيقات التاريخ المخصصة للنموذج
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -29,6 +29,7 @@ export const MY_FORMATS = {
   selector: 'app-booking-form',
   standalone: true,
   imports: [
+    // استيراد الوحدات اللازمة للنموذج وواجهة المستخدم
     CommonModule,
     FormsModule,
     MatFormFieldModule,
@@ -47,10 +48,15 @@ export const MY_FORMATS = {
   ]
 })
 export class BookingFormComponent implements OnInit {
+  // بيانات الفندق الحالي
   hotel: any;
+  // بيانات الغرفة المختارة
   selectedRoom: any;
+  // بيانات المستخدم الحالي
   user: any;
+  // بيانات الحجز (تاريخ الدخول والخروج وعدد الضيوف)
   booking = { id: null, check_in: null, check_out: null, guests: 1 };
+  // بيانات الدفع (بطاقة ائتمان)
   payment = {
     method: 'credit_card',
     cardNumber: '',
@@ -58,40 +64,51 @@ export class BookingFormComponent implements OnInit {
     cvv: '',
     cardholderName: '',
   };
+  // مؤشر التحميل
   loading: boolean = false;
+  // إظهار/إخفاء قسم الدفع
   showPaymentSection: boolean = false;
+  // أقل وأقصى تاريخ للحجز
   minDate: Date;
   maxDate: Date;
+  // أقل تاريخ لانتهاء البطاقة
   cardExpiryMinDate: Date;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private supabaseService: SupabaseService
+    private route: ActivatedRoute, // لجلب بيانات من الرابط
+    private router: Router, // للتوجيه بين الصفحات
+    private supabaseService: SupabaseService // خدمة التعامل مع Supabase
   ) {
+    // تحديد أقل وأقصى تاريخ للحجز (اليوم وحتى 5 أيام قادمة)
     this.minDate = new Date();
     this.maxDate = new Date();
     this.maxDate.setDate(this.minDate.getDate() + 5);
+    // أقل تاريخ لانتهاء البطاقة (أبريل 2025)
     this.cardExpiryMinDate = new Date(2025, 3, 1);
   }
 
+  // عند تحميل المكون
   async ngOnInit() {
     this.loading = true;
+    // جلب معرف الفندق والغرفة من الرابط
     const hotelId = this.route.snapshot.paramMap.get('id');
     const roomId = this.route.snapshot.queryParamMap.get('roomId');
 
+    // تحميل بيانات الفندق والغرفة إذا توفرت
     if (hotelId && roomId) {
       await this.loadHotelAndRoom(hotelId, roomId);
     }
 
+    // جلب بيانات المستخدم الحالي من Supabase
     const { data: userData } = await this.supabaseService.getCurrentUser();
     this.user = userData?.user;
     this.loading = false;
   }
 
+  // تحميل بيانات الفندق والغرفة من Supabase
   async loadHotelAndRoom(hotelId: string, roomId: string) {
     try {
-      // Load hotel
+      // جلب بيانات الفندق
       const { data: hotelData, error: hotelError } = await this.supabaseService.client
         .from('hotels')
         .select('*')
@@ -101,7 +118,7 @@ export class BookingFormComponent implements OnInit {
       if (hotelError) throw hotelError;
       this.hotel = hotelData;
 
-      // Load room
+      // جلب بيانات الغرفة
       const { data: roomData, error: roomError } = await this.supabaseService.client
         .from('rooms')
         .select('*')
@@ -111,6 +128,7 @@ export class BookingFormComponent implements OnInit {
       if (roomError) throw roomError;
       this.selectedRoom = roomData;
     } catch (error) {
+      // في حال حدوث خطأ أثناء التحميل
       console.error('Error loading data:', error);
       Swal.fire({
         icon: 'error',
@@ -121,6 +139,7 @@ export class BookingFormComponent implements OnInit {
     }
   }
 
+  // تنسيق رقم البطاقة ليظهر بشكل 4-4-4-4
   formatCardNumber() {
     let value = this.payment.cardNumber.replace(/\D/g, '');
     value = value.substring(0, 16);
@@ -130,6 +149,7 @@ export class BookingFormComponent implements OnInit {
       .trim() || value;
   }
 
+  // تنسيق تاريخ انتهاء البطاقة ليظهر بشكل MM/YY
   formatExpiryDate() {
     let value = this.payment.expiryDate.replace(/\D/g, '');
     value = value.substring(0, 4);
@@ -140,6 +160,7 @@ export class BookingFormComponent implements OnInit {
     }
   }
 
+  // حساب السعر الكلي للحجز بناءً على عدد الليالي وعدد الضيوف
   calculateTotalPrice(): number {
     if (!this.booking.check_in || !this.booking.check_out || !this.selectedRoom) {
       return 0;
@@ -152,6 +173,7 @@ export class BookingFormComponent implements OnInit {
     );
 
     let total = nights * this.selectedRoom.price_per_night;
+    // إضافة تكلفة إضافية إذا زاد عدد الضيوف عن الحد الأقصى للغرفة
     if (this.booking.guests > this.selectedRoom.max_occupancy) {
       total += nights * 100 * (this.booking.guests - this.selectedRoom.max_occupancy);
     }
@@ -159,7 +181,9 @@ export class BookingFormComponent implements OnInit {
     return total;
   }
 
+  // عند إرسال نموذج الحجز
   async onSubmit() {
+    // إذا لم يكن المستخدم مسجلاً الدخول
     if (!this.user) {
       Swal.fire({
         icon: 'warning',
@@ -174,6 +198,7 @@ export class BookingFormComponent implements OnInit {
       return;
     }
 
+    // التحقق من اكتمال البيانات
     if (!this.booking.check_in || !this.booking.check_out || !this.booking.guests || !this.selectedRoom) {
       Swal.fire({
         icon: 'error',
@@ -186,6 +211,7 @@ export class BookingFormComponent implements OnInit {
 
     this.loading = true;
 
+    // إضافة الحجز في جدول bookings في Supabase
     const { data, error } = await this.supabaseService.client
       .from('bookings')
       .insert({
@@ -201,6 +227,7 @@ export class BookingFormComponent implements OnInit {
       .single();
 
     if (error) {
+      // في حال حدوث خطأ أثناء الحجز
       Swal.fire({
         icon: 'error',
         title: 'Booking Error',
@@ -211,6 +238,7 @@ export class BookingFormComponent implements OnInit {
       return;
     }
 
+    // حفظ رقم الحجز وإظهار قسم الدفع
     this.booking.id = data.id;
     this.showPaymentSection = true;
     this.loading = false;
@@ -222,12 +250,15 @@ export class BookingFormComponent implements OnInit {
       confirmButtonText: 'OK',
     });
 
+    // تمرير المستخدم لقسم الدفع
     setTimeout(() => {
       document.querySelector('.payment-section')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   }
 
+  // عند إرسال بيانات الدفع
   async onSubmitPayment() {
+    // التحقق من صحة بيانات البطاقة
     if (
       !this.payment.cardNumber ||
       !this.payment.expiryDate ||
@@ -277,7 +308,9 @@ export class BookingFormComponent implements OnInit {
     }
 
     this.loading = true;
+    // محاكاة عملية الدفع (انتظار 2 ثانية)
     setTimeout(async () => {
+      // تحديث حالة الحجز في قاعدة البيانات بعد الدفع
       const { error } = await this.supabaseService.client
         .from('bookings')
         .update({
@@ -287,6 +320,7 @@ export class BookingFormComponent implements OnInit {
         .eq('id', this.booking.id);
 
       if (error) {
+        // في حال حدوث خطأ أثناء تحديث حالة الحجز
         console.error('Error updating booking status:', error);
         Swal.fire({
           icon: 'error',
@@ -295,6 +329,7 @@ export class BookingFormComponent implements OnInit {
           confirmButtonText: 'OK',
         });
       } else {
+        // نجاح الدفع وتأكيد الحجز
         Swal.fire({
           icon: 'success',
           title: 'Booking Confirmed',
