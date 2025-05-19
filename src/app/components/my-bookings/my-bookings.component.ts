@@ -74,6 +74,7 @@ export class MyBookingsComponent implements OnInit {
             room_type,
             price_per_night,
             hotels (
+              id,
               name,
               location,
               image_url
@@ -84,6 +85,7 @@ export class MyBookingsComponent implements OnInit {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
+      console.log('Loaded bookings:', bookings);
       this.bookings = bookings || [];
     } catch (error) {
       console.error('Error loading bookings:', error);
