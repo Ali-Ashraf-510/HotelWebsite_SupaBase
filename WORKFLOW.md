@@ -27,20 +27,9 @@ src/
 │   │   │   ├── create/     # Create Booking Component
 │   │   │   └── manage/     # Manage Bookings Component
 │   │   └── shared/         # Shared Components
-│   │       ├── header/     # Header Component
-│   │       └── footer/     # Footer Component
+│   │       └── navabr/     # Footer Component
 │   ├── services/           # Application Services
-│   │   ├── supabase.service.ts
-│   │   ├── auth.service.ts
-│   │   └── booking.service.ts
-│   ├── models/             # TypeScript Interfaces
-│   │   ├── hotel.model.ts
-│   │   ├── booking.model.ts
-│   │   └── user.model.ts
-│   ├── guards/             # Route Guards
-│   │   ├── auth.guard.ts
-│   │   └── admin.guard.ts
-│   └── utils/              # Utility Functions
+        └── supabase.service.ts
 ```
 
 ## 3. Core Workflows
