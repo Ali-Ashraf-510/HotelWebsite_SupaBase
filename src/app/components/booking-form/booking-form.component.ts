@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatNativeDateModule, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, NativeDateAdapter } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import Swal from 'sweetalert2';
 
@@ -20,10 +20,23 @@ export const MY_FORMATS = {
   display: {
     dateInput: 'DD/MM/YYYY',
     monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
+    dateA11yLabel: 'DD/MM/YYYY',
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
+
+// تخصيص NativeDateAdapter
+class CustomDateAdapter extends NativeDateAdapter {
+  override format(date: Date, displayFormat: string): string {
+    if (displayFormat === 'DD/MM/YYYY') {
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+    return super.format(date, displayFormat);
+  }
+}
 
 @Component({
   selector: 'app-booking-form',
@@ -44,7 +57,8 @@ export const MY_FORMATS = {
   styleUrls: ['./booking-form.component.css'],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: DateAdapter, useClass: CustomDateAdapter }
   ]
 })
 export class BookingFormComponent implements OnInit {
