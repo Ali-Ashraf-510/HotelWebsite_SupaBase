@@ -8,7 +8,6 @@ The Hotel Booking Website is a full-stack web application built with:
 - **UI Framework**: Angular Material Design
 - **Authentication**: Supabase Auth
 - **State Management**: Angular Services
-- **API Integration**: REST APIs with Supabase Client
 
 ## 2. Project Structure
 
@@ -28,7 +27,7 @@ src/
 │   │   │   └── manage/     # Manage Bookings Component
 │   │   └── shared/         # Shared Components
 │   │       └── navabr/     # Footer Component
-│   ├── services/           # Application Services
+│___├── services/           # Application Services
         └── supabase.service.ts
 ```
 
