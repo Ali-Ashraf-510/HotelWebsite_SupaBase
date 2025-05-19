@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../../services/supabase.service';
-import { RouterLink, ActivatedRoute } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Hotel } from '../../shared/types';
-
-// واجهة معايير البحث
-
 
 // واجهة بيانات الفندق مع تفاصيل إضافية
 interface HotelWithDetails extends Hotel {
@@ -33,40 +30,24 @@ interface HotelWithDetails extends Hotel {
   styleUrls: ['./hotel-list.component.css']
 })
 export class HotelListComponent implements OnInit {
-  // قائمة جميع الفنادق مع التفاصيل
-  hotels: HotelWithDetails[] = [];
-  // مؤشر التحميل
-  isLoading = true;
-  // رسالة الخطأ (إن وجدت)
-  error: string | null = null;
+  hotels: HotelWithDetails[] = []; // جميع الفنادق مع التفاصيل
+  isLoading = true; // مؤشر التحميل
+  error: string | null = null; // رسالة الخطأ
 
-  constructor(
-    private supabase: SupabaseService, // خدمة التعامل مع Supabase
-    private route: ActivatedRoute // لجلب معايير البحث من الرابط
-  ) {}
+  constructor(private supabase: SupabaseService) {}
 
-  // عند تحميل المكون
   ngOnInit() {
-    // لم يعد هناك حاجة للاشتراك في queryParams
     this.fetchHotels(); // جلب الفنادق عند بدء الصفحة
   }
 
   // جلب جميع الفنادق من قاعدة البيانات عبر الخدمة
   private async fetchHotels() {
+    this.isLoading = true;
     try {
-      this.isLoading = true;
       const { data, error } = await this.supabase.getHotels();
-      
-      if (error) {
-        throw new Error(error);
-      }
-
-      if (!data) {
-        throw new Error('No data received');
-      }
-
+      if (error) throw new Error(error);
+      if (!data) throw new Error('No data received');
       this.hotels = data as HotelWithDetails[];
-      
     } catch (error) {
       console.error('Error fetching hotels:', error);
       this.error = 'Failed to load hotels. Please try again later.';
