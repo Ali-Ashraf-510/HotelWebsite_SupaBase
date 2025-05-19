@@ -9,12 +9,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Hotel } from '../../shared/types';
 
 // واجهة معايير البحث
-interface SearchParams {
-  location: string; // موقع الفندق
-  guests: number; // عدد الضيوف
-  checkIn: string | null; // تاريخ الدخول
-  checkOut: string | null; // تاريخ الخروج
-}
+
 
 // واجهة بيانات الفندق مع تفاصيل إضافية
 interface HotelWithDetails extends Hotel {
