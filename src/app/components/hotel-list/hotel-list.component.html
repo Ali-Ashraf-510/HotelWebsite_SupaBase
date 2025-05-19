@@ -1,6 +1,6 @@
 <div class="hotel-list-container">
   <h2 class="section-title">
-    {{ searchParams.location ? 'Hotels in ' + searchParams.location : 'Our Luxury Hotels' }}
+    Our Luxury Hotels
   </h2>
 
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" class="loading-progress"></mat-progress-bar>
@@ -12,7 +12,7 @@
 
   <div *ngIf="!isLoading && !error && hotels.length === 0" class="no-hotels">
     <mat-icon>hotel</mat-icon>
-    <p>No hotels found{{ searchParams.location ? ' in ' + searchParams.location : '' }}</p>
+    <p>No hotels found</p>
   </div>
 
   <div *ngIf="!isLoading && !error && hotels.length > 0" class="hotels-grid">

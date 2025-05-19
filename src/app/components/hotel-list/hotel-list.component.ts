@@ -44,13 +44,6 @@ export class HotelListComponent implements OnInit {
   isLoading = true;
   // رسالة الخطأ (إن وجدت)
   error: string | null = null;
-  // معايير البحث الحالية
-  searchParams: SearchParams = {
-    location: '',
-    guests: 1,
-    checkIn: null,
-    checkOut: null
-  };
 
   constructor(
     private supabase: SupabaseService, // خدمة التعامل مع Supabase
@@ -59,16 +52,8 @@ export class HotelListComponent implements OnInit {
 
   // عند تحميل المكون
   ngOnInit() {
-    // الاشتراك في متغيرات البحث من الرابط
-    this.route.queryParams.subscribe(params => {
-      this.searchParams = {
-        location: params['location'] || '',
-        guests: params['guests'] ? parseInt(params['guests']) : 1,
-        checkIn: params['checkIn'] || null,
-        checkOut: params['checkOut'] || null
-      };
-      this.fetchHotels(); // جلب الفنادق عند تغيير معايير البحث
-    });
+    // لم يعد هناك حاجة للاشتراك في queryParams
+    this.fetchHotels(); // جلب الفنادق عند بدء الصفحة
   }
 
   // جلب جميع الفنادق من قاعدة البيانات عبر الخدمة
@@ -86,7 +71,6 @@ export class HotelListComponent implements OnInit {
       }
 
       this.hotels = data as HotelWithDetails[];
-      // لم تعد هناك تصفية
       
     } catch (error) {
       console.error('Error fetching hotels:', error);
