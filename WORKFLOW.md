@@ -36,28 +36,24 @@ src/
 ### 3.1 Authentication Flow
 1. **Login Process**:
    ```typescript
-   // 1. User enters credentials
-   // 2. Form validation
-   validateForm(): boolean {
-     // Email validation
-     // Password validation
-   }
-
-   // 3. Authentication request
-   async login(email: string, password: string) {
-     const { data, error } = await this.supabase.auth.signInWithPassword({
-       email,
-       password
-     });
-   }
-
-   // 4. Handle response
-   if (error) {
-     // Show error message
-   } else {
-     // Store user data
-     // Navigate to dashboard
-   }
+   async signIn(email: string, password: string) {
+      console.log('Calling Supabase signInWithPassword with:', { email });
+      try {
+        const response = await Promise.race([
+          this.supabase.auth.signInWithPassword({ email, password }),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Sign-in request timed out')), 10000)
+          ),
+        ]);
+        console.log('Sign-in response:', response);
+        const typedResponse = response as { data: { user: User | null } };
+        this.currentUser.next(typedResponse.data.user);
+        return response;
+      } catch (error) {
+        console.error('Sign-in error:', error);
+        throw error;
+      }
+    }
    ```
 
 2. **Registration Process**:
