@@ -100,6 +100,7 @@ mat-card-subtitle {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  height: 48px;
 }
 
 .submit-button:not(:disabled):hover {
@@ -109,6 +110,16 @@ mat-card-subtitle {
 
 .submit-button mat-icon {
   font-size: 1.2rem;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  margin-right: 4px;
+}
+
+.submit-button span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .submit-button:disabled {
