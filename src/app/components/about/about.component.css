@@ -26,12 +26,15 @@
   font-weight: 800;
   font-family: 'Inter', sans-serif;
   margin-bottom: 1rem;
+  color: #F9FAFB;
 }
 
 .hero-subtitle {
   font-size: 1.5rem;
   font-weight: 400;
   margin-bottom: 1.5rem;
+  color: #F9FAFB;
+
 }
 
 .hero-cta {
@@ -245,7 +248,116 @@
   background-color: #EF4444;
   color: #FFFFFF;
 }
+.footer {
+  background-color: #1a2b49 !important;
+}
 
+.footer h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  color: white;
+}
+
+.footer p, .footer li {
+  color: #b0bcd4;
+}
+
+.footer a {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: #4a6cf7 !important;
+}
+
+.footer .fab {
+  font-size: 1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.footer .fab:hover {
+  background-color: #4a6cf7;
+  color: white !important;
+  transform: translateY(-3px);
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1400px) {
+  .hotel-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-section {
+    padding: 1rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .hotel-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .hotel-card {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .amenities {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .card-image-container {
+    height: 200px;
+  }
+
+  mat-card-title {
+    font-size: 1.25rem !important;
+  }
+
+  .price-tag {
+    bottom: 15px;
+    right: 15px;
+    padding: 0.5rem 1rem;
+  }
+
+  .amount {
+    font-size: 1.25rem;
+  }
+}
 /* Responsive Design */
 @media screen and (max-width: 768px) {
   .hero-section {
