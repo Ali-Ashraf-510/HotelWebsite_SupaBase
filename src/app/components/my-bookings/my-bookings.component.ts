@@ -12,6 +12,7 @@ import { RouterModule, Router } from '@angular/router';
 import { SupabaseService } from '../../services/supabase.service';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-my-bookings',
@@ -60,10 +61,22 @@ export class MyBookingsComponent implements OnInit {
       const { data: { user }, error: authError } = await this.supabaseService.client.auth.getUser();
       
       if (authError || !user) {
-        this.snackBar.open('يرجى تسجيل الدخول لعرض حجوزاتك', 'إغلاق', {
-          duration: 3000
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Login Required',
+          text: 'Please log in to view your bookings.',
+          confirmButtonText: 'Go to Login',
+          showCancelButton: true,
+          cancelButtonText: 'Cancel',
+          customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-secondary'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/auth']);
+          }
         });
-        this.router.navigate(['/auth']);
         return;
       }
 
@@ -71,6 +84,15 @@ export class MyBookingsComponent implements OnInit {
       await this.loadBookings();
     } catch (error) {
       console.error('Auth check error:', error);
+      await Swal.fire({
+        icon: 'error',
+        title: 'Authentication Error',
+        text: 'There was an error checking your authentication status.',
+        confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'btn btn-primary'
+        }
+      });
       this.router.navigate(['/auth']);
     }
   }
@@ -106,11 +128,42 @@ export class MyBookingsComponent implements OnInit {
       if (error) throw error;
       console.log('Loaded bookings:', bookings);
       this.bookings = bookings || [];
+
+      if (this.bookings.length === 0) {
+        await Swal.fire({
+          icon: 'info',
+          title: 'No Bookings Found',
+          text: 'You haven\'t made any bookings yet.',
+          confirmButtonText: 'Browse Hotels',
+          showCancelButton: true,
+          cancelButtonText: 'Close',
+          customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-secondary'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/']);
+          }
+        });
+      }
     } catch (error) {
       console.error('Error loading bookings:', error);
-      this.snackBar.open('حدث خطأ أثناء تحميل الحجوزات', 'إغلاق', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error Loading Bookings',
+        text: 'There was an error loading your bookings. Please try again.',
+        confirmButtonText: 'Retry',
+        showCancelButton: true,
+        cancelButtonText: 'Close',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-secondary'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loadBookings();
+        }
       });
     } finally {
       this.loading = false;
@@ -186,15 +239,39 @@ export class MyBookingsComponent implements OnInit {
    */
   async cancelBooking(bookingId: string) {
     if (!this.user) {
-      this.snackBar.open('يرجى تسجيل الدخول لإلغاء الحجز', 'إغلاق', {
-        duration: 3000
+      await Swal.fire({
+        icon: 'warning',
+        title: 'Login Required',
+        text: 'Please log in to cancel your booking.',
+        confirmButtonText: 'Go to Login',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-secondary'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/auth']);
+        }
       });
       return;
     }
 
-    const confirmed = window.confirm('هل أنت متأكد من إلغاء هذا الحجز؟ سيتم حذفه نهائياً.');
-    
-    if (!confirmed) {
+    const result = await Swal.fire({
+      icon: 'warning',
+      title: 'Cancel Booking',
+      text: 'Are you sure you want to cancel this booking? This action cannot be undone.',
+      confirmButtonText: 'Yes, Cancel Booking',
+      showCancelButton: true,
+      cancelButtonText: 'No, Keep Booking',
+      customClass: {
+        confirmButton: 'btn btn-danger',
+        cancelButton: 'btn btn-secondary'
+      }
+    });
+
+    if (!result.isConfirmed) {
       return;
     }
 
@@ -210,7 +287,7 @@ export class MyBookingsComponent implements OnInit {
         .single();
 
       if (checkError || !bookingCheck) {
-        throw new Error('غير مصرح لك بإلغاء هذا الحجز');
+        throw new Error('You are not authorized to cancel this booking');
       }
 
       // حذف الحجز من قاعدة البيانات
@@ -225,14 +302,25 @@ export class MyBookingsComponent implements OnInit {
       // حذف الحجز من المصفوفة المحلية
       this.bookings = this.bookings.filter(booking => booking.id !== bookingId);
       
-      this.snackBar.open('تم إلغاء الحجز بنجاح', 'إغلاق', {
-        duration: 3000
+      await Swal.fire({
+        icon: 'success',
+        title: 'Booking Cancelled',
+        text: 'Your booking has been successfully cancelled.',
+        confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'btn btn-primary'
+        }
       });
     } catch (error) {
       console.error('Error cancelling booking:', error);
-      this.snackBar.open('حدث خطأ أثناء إلغاء الحجز', 'إغلاق', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
+      await Swal.fire({
+        icon: 'error',
+        title: 'Cancellation Failed',
+        text: 'There was an error cancelling your booking. Please try again.',
+        confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'btn btn-primary'
+        }
       });
     } finally {
       this.loading = false;
