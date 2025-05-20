@@ -159,7 +159,20 @@ export class MyBookingsComponent implements OnInit {
    * @returns التاريخ منسق بالشكل المطلوب
    */
   formatDate(date: string): string {
-    return new Date(date).toLocaleDateString('en-GB', {
+    console.log('Original date from DB:', date);
+    
+    // Ensure we're working with a valid date string
+    if (!date) return '';
+    
+    // Create date in UTC to avoid timezone issues
+    const [year, month, day] = date.split('T')[0].split('-').map(Number);
+    const utcDate = new Date(Date.UTC(year, month - 1, day));
+    
+    console.log('Parsed date components:', { year, month, day });
+    console.log('UTC date:', utcDate);
+    
+    return utcDate.toLocaleDateString('en-US', {
+      timeZone: 'UTC',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
