@@ -1,17 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Import Modern Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* Global Typography */
 html {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Cairo', 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cairo', sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #1A202C;
@@ -48,7 +48,7 @@ h6 {
 }
 
 p {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Cairo', sans-serif;
   font-weight: 400;
   line-height: 1.7;
   color: #4A5568;
@@ -102,7 +102,7 @@ p {
 html, body { height: 100%; }
 body { 
   margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Cairo', 'Inter', sans-serif;
   padding-top: 70px; /* Add padding equal to navbar height */
 }
 
